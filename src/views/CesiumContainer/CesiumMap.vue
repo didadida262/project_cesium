@@ -63,8 +63,9 @@ let viewer = null as any
 
 const handleMark = () => {
   const drawTool = new DrawTool(viewer)
-
-  drawTool.activate('Polygon')
+  drawTool.activate('Polygon', (data: any) => {
+    console.log('data>>>', data)
+  })
   //   drawTool.activate("Polyline");
 }
 const handleJump = () => {
