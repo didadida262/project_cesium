@@ -1,7 +1,10 @@
 <template>
   <div class="w-full h-full relative text-[white]">
     <div
-      class="operation w-[calc(50%)] h-[90px] absolute top-[20px] left-[20px] z-10"
+      :class="[
+        'operation w-[calc(50%)]  absolute top-[10px] left-[20px] z-10',
+        'flex justify-start items-center gap-x-[20px]',
+      ]"
     >
       <div
         :class="[
@@ -12,6 +15,26 @@
         @click="handleJump"
       >
         跳转至目标地点
+      </div>
+      <div
+        :class="[
+          'px-[5px] py-[5px] bg-[rgb(55,55,61)] w-[180px] h-[50px] flex justify-center items-center',
+          'hover:cursor-pointer hover:opacity-75',
+        ]"
+        type="primary"
+        @click="handleMark"
+      >
+        标注
+      </div>
+      <div
+        :class="[
+          'px-[5px] py-[5px] bg-[rgb(55,55,61)] w-[180px] h-[50px] flex justify-center items-center',
+          'hover:cursor-pointer hover:opacity-75',
+        ]"
+        type="primary"
+        @click="handleMark"
+      >
+        动态演示
       </div>
     </div>
     <div
@@ -26,16 +49,24 @@ import { onMounted, ref } from 'vue'
 
 import 'cesium/Build/Cesium/Widgets/widgets.css'
 import * as Cesium from 'cesium'
+import DrawTool from '../../utils/drawGraphic.js'
 // 设置 Cesium Ion 访问令牌
 Cesium.Ion.defaultAccessToken =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJhMTQ4ZmRhMS00MjY3LTRlZTgtOGU3Yi01OTY4NTEwN2NkYzciLCJpZCI6Mjk0MTEyLCJpYXQiOjE3NDQ2ODU2OTd9.yMNzVcVvq9NI2sXWePenGj5ZJbshJqiGqctlNlDWEDA'
 
-const currentHeight = ref('') as any
-const clickedPosition = ref(null) as any
+// const currentHeight = ref("") as any;
+// const clickedPosition = ref(null) as any;
 
 let viewer = null as any
 //   let scene = null;
 //   let handler = null;
+
+const handleMark = () => {
+  const drawTool = new DrawTool(viewer)
+
+  drawTool.activate('Polygon')
+  //   drawTool.activate("Polyline");
+}
 const handleJump = () => {
   // 定位到台湾
   flyToTaiwan()
