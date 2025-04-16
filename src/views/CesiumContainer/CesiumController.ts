@@ -36,6 +36,10 @@ export class CesiumController {
     this.viewer.scene.debugShowFramesPerSecond = true;
     (window as any).viewer = this.viewer
   }
+  static exportPointData() {
+    const res = this.drawTool && this.drawTool.exportPointData()
+    return res
+  }
   static flyToTaiwan() {
     if (!this.viewer) return
     // 台湾的经纬度坐标（台北）
@@ -87,11 +91,8 @@ export class CesiumController {
     this.drawTool && this.drawTool.clearPoints()
   }
   static mark(type: string) {
-    console.log('mark>>', type)
     this.drawTool = new DrawTool(this.viewer)
-    this.drawTool.activate(type, (data: any) => {
-      console.log('data>>>', data)
-    })
+    // this.drawTool.activate(type, (data: any) => {});
   }
   static async showSituation() {
     await this.setupModelAnimation()

@@ -21,11 +21,18 @@
           :options="options"
           :on-click="handleSelectMark"
         />
+
         <Button
           v-if="item.key === BTNMap[1].key && currenModel === BTNMap[1].text"
           text="清除"
           classname="!h-[36px] !w-[100px]"
           :on-click="handleClear"
+        />
+        <Button
+          v-if="item.key === BTNMap[1].key && currenModel === BTNMap[1].text"
+          text="导出数据"
+          classname="!h-[36px] !w-[100px]"
+          :on-click="exportPoint"
         />
       </div>
     </div>
@@ -47,6 +54,10 @@ import { BTNMap, options } from './const'
 
 const currenModel = ref('')
 
+const exportPoint = () => {
+  const res = CesiumController.exportPointData()
+  console.log('导出数据>>>', res)
+}
 const handleClear = () => {
   CesiumController.clearAllPoints()
 }

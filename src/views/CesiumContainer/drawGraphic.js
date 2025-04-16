@@ -302,6 +302,24 @@ export default class DrawTool {
     })
   }
 
+  // 导出数据
+  exportPointData() {
+    const entities = this.viewer.entities.values
+    const result = []
+    entities.forEach((entity) => {
+      if (entity.point && entity.position) {
+        const cartesian = entity.position.getValue(Cesium.JulianDate.now())
+        const cartographic = Cesium.Cartographic.fromCartesian(cartesian)
+        const lon = Cesium.Math.toDegrees(cartographic.longitude)
+        const lat = Cesium.Math.toDegrees(cartographic.latitude)
+        const height = cartographic.height
+        result.push({ lon, lat, height })
+      }
+    })
+
+    return result
+  }
+
   /**
    * 画点
    * @param p
