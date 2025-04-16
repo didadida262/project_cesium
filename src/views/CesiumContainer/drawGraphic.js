@@ -21,8 +21,8 @@ export default class DrawTool {
   activate(drawType, callback) {
     this.clearAll()
     this._drawType = drawType
-    this._dataSource = new Cesium.CustomDataSource('_dataSource')
-    this.viewer.dataSources.add(this._dataSource)
+    // this._dataSource = new Cesium.CustomDataSource('_dataSource')
+    // this.viewer.dataSources.add(this._dataSource)
     this._registerEvents(callback) //注册鼠标事件
   }
 
@@ -298,7 +298,7 @@ export default class DrawTool {
    * @private
    */
   _addPoint(p) {
-    this._dataSource.entities.add({
+    this.viewer.entities.add({
       position: Cesium.Cartesian3.fromDegrees(p[0], p[1], p[2]),
       point: {
         color: Cesium.Color.RED,

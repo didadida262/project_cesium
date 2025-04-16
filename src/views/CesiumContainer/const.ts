@@ -15,13 +15,14 @@ export const BTNMap = [
 ]
 export const options = [
   {
-    label: '绘制区域',
-    key: 'Polygon',
-  },
-  {
     label: '绘制点',
     key: 'Point',
   },
+  {
+    label: '绘制区域',
+    key: 'Polygon',
+  },
+
   //   {
   //     label: "测量",
   //     key: "measure",
