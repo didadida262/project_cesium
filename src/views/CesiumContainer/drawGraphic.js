@@ -21,8 +21,8 @@ export default class DrawTool {
   activate(drawType, callback) {
     this.clearAll()
     this._drawType = drawType
-    // this._dataSource = new Cesium.CustomDataSource('_dataSource')
-    // this.viewer.dataSources.add(this._dataSource)
+    this._dataSource = new Cesium.CustomDataSource('_dataSource')
+    this.viewer.dataSources.add(this._dataSource)
     this._registerEvents(callback) //注册鼠标事件
   }
 
