@@ -24,6 +24,7 @@
         <Button
           v-if="item.key === BTNMap[1].key && currenModel === BTNMap[1].text"
           text="清除"
+          classname="!h-[36px] !w-[100px]"
           :on-click="handleClear"
         />
       </div>
