@@ -9,11 +9,17 @@
       <div
         v-for="item in BTNMap"
         :key="item.key"
+        class="flex justify-start items-center gap-x-[10px]"
         @click="handleClickBTN(item)"
       >
         <Button
           :text="item.text"
           :curren-model="currenModel"
+        />
+        <Select
+          v-if="item.key === BTNMap[1].key && currenModel === BTNMap[1].text"
+          :options="options"
+          :on-click="handleSelectMark"
         />
       </div>
     </div>
@@ -29,21 +35,31 @@ import { onMounted, ref } from 'vue'
 
 import 'cesium/Build/Cesium/Widgets/widgets.css'
 import Button from '../../components/ButtonComponent.vue'
+import Select from '../../components/SelectComponent.vue'
 import { CesiumController } from './CesiumController'
-import { BTNMap } from './const'
+import { BTNMap, options } from './const'
 
 const currenModel = ref('')
+const handleMark = () => {
+  CesiumController.markArea('Polygon')
+}
+const handleSelectMark = (item: any) => {
+  CesiumController.markArea(item.key)
+}
 const handleClickBTN = (btn: any) => {
   currenModel.value = btn.text
   switch (btn.key) {
     case 'jump':
       CesiumController.flyToTaiwan()
       break
-    case 'mark':
-      CesiumController.markArea()
+
+    case 'markPoint':
+      CesiumController.markArea('Point')
       break
     case 'situation':
       CesiumController.showSituation()
+      break
+    default:
       break
   }
 }

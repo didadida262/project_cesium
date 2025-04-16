@@ -1,5 +1,5 @@
 import * as Cesium from 'cesium'
-import DrawTool from '../../utils/drawGraphic.js'
+import DrawTool from './drawGraphic.js'
 
 export class CesiumController {
   static viewer: Cesium.Viewer | null | undefined
@@ -76,9 +76,9 @@ export class CesiumController {
       },
     })
   }
-  static markArea() {
+  static markArea(type: string) {
     const drawTool = new DrawTool(this.viewer)
-    drawTool.activate('Polygon', (data: any) => {
+    drawTool.activate(type, (data: any) => {
       console.log('data>>>', data)
     })
   }

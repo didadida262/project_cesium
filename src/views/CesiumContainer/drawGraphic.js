@@ -1,10 +1,3 @@
-/*
- * @Description: 绘制工具
- * @Author: 笙痞77
- * @Date: 2023-02-02 11:28:21
- * @LastEditors: 笙痞77
- * @LastEditTime: 2023-02-02 14:52:35
- */
 import * as Cesium from 'cesium'
 
 export default class DrawTool {
