@@ -150,29 +150,5 @@ export class CesiumController {
         arcType: Cesium.ArcType.GEODESIC,
       },
     })
-
-    // // 6. 添加起点和终点标记
-    this.addLocationMarker(this.tainanPosition, '台南')
-    this.addLocationMarker(this.taipeiPosition, '台北')
-  }
-  static addLocationMarker(position: Cesium.Cartesian3, name: string) {
-    if (!this.viewer) return
-    this.viewer.entities.add({
-      position: position,
-      billboard: {
-        image: '/images/marker.png', // 替换为你的标记图片
-        width: 32,
-        height: 32,
-        verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
-      },
-      label: {
-        text: name,
-        font: '14pt sans-serif',
-        style: Cesium.LabelStyle.FILL_AND_OUTLINE,
-        outlineWidth: 2,
-        verticalOrigin: Cesium.VerticalOrigin.TOP,
-        pixelOffset: new Cesium.Cartesian2(0, 20),
-      },
-    })
   }
 }
