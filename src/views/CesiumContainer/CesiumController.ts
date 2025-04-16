@@ -92,7 +92,9 @@ export class CesiumController {
   }
   static mark(type: string) {
     this.drawTool = new DrawTool(this.viewer)
-    // this.drawTool.activate(type, (data: any) => {});
+    this.drawTool.activate(type, (data: any) => {
+      console.log('>>>>>')
+    })
   }
   static async showSituation() {
     await this.setupModelAnimation()
