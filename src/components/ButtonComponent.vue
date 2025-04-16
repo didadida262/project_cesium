@@ -17,7 +17,7 @@
 <script setup lang="ts">
 const props = defineProps<{
   text: string;
-  currenModel: string;
+  currenModel?: string;
   onClick?: () => void;
 }>()
 </script>

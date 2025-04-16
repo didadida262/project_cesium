@@ -3,6 +3,8 @@ import DrawTool from './drawGraphic.js'
 
 export class CesiumController {
   static viewer: Cesium.Viewer | null | undefined
+  static drawTool: DrawTool | null | undefined
+
   // 台南和台北的坐标
   static tainanPosition = Cesium.Cartesian3.fromDegrees(120.213, 22.997) // 台南
   static taipeiPosition = Cesium.Cartesian3.fromDegrees(121.565, 25.033) // 台北
@@ -76,9 +78,13 @@ export class CesiumController {
       },
     })
   }
-  static markArea(type: string) {
-    const drawTool = new DrawTool(this.viewer)
-    drawTool.activate(type, (data: any) => {
+  static clearAllMark() {
+    this.drawTool && this.drawTool.clearAll()
+  }
+  static mark(type: string) {
+    console.log('mark>>', type)
+    this.drawTool = new DrawTool(this.viewer)
+    this.drawTool.activate(type, (data: any) => {
       console.log('data>>>', data)
     })
   }

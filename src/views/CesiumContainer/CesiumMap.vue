@@ -21,6 +21,11 @@
           :options="options"
           :on-click="handleSelectMark"
         />
+        <Button
+          v-if="item.key === BTNMap[1].key && currenModel === BTNMap[1].text"
+          text="清除"
+          :on-click="handleClear"
+        />
       </div>
     </div>
     <div
@@ -40,9 +45,13 @@ import { CesiumController } from './CesiumController'
 import { BTNMap, options } from './const'
 
 const currenModel = ref('')
+
+const handleClear = () => {
+  CesiumController.clearAllMark()
+}
 const handleSelectMark = (item: any) => {
   console.log('handleSelectMark>>>', item)
-  CesiumController.markArea(item.key)
+  CesiumController.mark(item.key)
 }
 const handleClickBTN = (btn: any) => {
   currenModel.value = btn.text
