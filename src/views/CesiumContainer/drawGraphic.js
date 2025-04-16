@@ -62,7 +62,7 @@ export default class DrawTool {
    */
   _leftClickEventForPoint() {
     this._drawHandler.setInputAction((e) => {
-      // this.viewer._element.style.cursor = 'default';
+      this.viewer._element.style.cursor = 'pointer'
       let p = this.viewer.scene.pickPosition(e.position)
       if (!p) return
       //手动给他提高50m，也可以取消哈
