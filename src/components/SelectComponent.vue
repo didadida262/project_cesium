@@ -1,5 +1,6 @@
 <template>
   <div
+    ref="target"
     :class="[
       'border-[2px] border-solid border-[#383B45] rounded-md bg-[rgb(18,20,22)] ',
       'relative w-[120px] select-none text-textFourthSize',
@@ -56,12 +57,17 @@
 
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue'
+import { onClickOutside } from '@vueuse/core'
 
 const props = defineProps<{
   options: any;
   onClick: (item: any) => void;
 }>()
 
+const target = ref(null)
+onClickOutside(target, (event) => {
+  setShow(false)
+})
 const show = ref(false)
 const value = ref(null) as any
 const activeValue = ref('')

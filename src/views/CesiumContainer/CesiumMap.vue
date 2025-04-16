@@ -30,7 +30,7 @@
         />
         <Button
           v-if="item.key === BTNMap[1].key && currenModel === BTNMap[1].text"
-          text="导出数据"
+          text="提交数据"
           classname="!h-[36px] !w-[100px]"
           :on-click="exportPoint"
         />
@@ -81,7 +81,7 @@ const handleClickBTN = (btn: any) => {
 
 onMounted(() => {
   CesiumController.init_world('cesiumContainer')
-  CesiumController.drawPoints(MockPointData)
+  //   CesiumController.drawPoints(MockPointData)
 })
 </script>
 

@@ -23,6 +23,7 @@
     "@typescript-eslint/parser": "^5.12.1",
     "@vue/compiler-sfc": "^3.2.31",
     "@vue/eslint-config-typescript": "^10.0.0",
+    "@vueuse/core": "^13.1.0",
     "autoprefixer": "^10.4.14",
     "babel-eslint": "^10.1.0",
     "cesium": "1.105.0",
@@ -36,6 +37,7 @@
     "postcss": "^8.4.23",
     "prettier": "^2.5.1",
     "typescript": "^4.5.5",
+    "v-click-outside": "^3.2.0",
     "vite": "^2.8.4",
     "vite-plugin-cesium": "~1.2.22"
   },
