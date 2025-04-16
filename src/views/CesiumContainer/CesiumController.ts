@@ -36,7 +36,7 @@ export class CesiumController {
     this.viewer.scene.debugShowFramesPerSecond = true;
     (window as any).viewer = this.viewer
   }
-  static exportPointData() {
+  static exportData() {
     const res = this.drawTool && this.drawTool.exportData()
     return res
   }

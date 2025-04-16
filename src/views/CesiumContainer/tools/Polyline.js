@@ -42,14 +42,41 @@ export default class DrawTool {
     const entities = this.viewer.entities.values
     const result = []
     entities.forEach((entity) => {
-      console.log('entity>>>', entity)
-      if (entity.name === this.name && entity.position) {
-        const cartesian = entity.position.getValue(Cesium.JulianDate.now())
-        const cartographic = Cesium.Cartographic.fromCartesian(cartesian)
-        const lon = Cesium.Math.toDegrees(cartographic.longitude)
-        const lat = Cesium.Math.toDegrees(cartographic.latitude)
-        const height = cartographic.height
-        result.push({ lon, lat, height })
+      console.warn('entity>>>', entity)
+      if (entity.name === this.name && entity.polyline.positions) {
+        console.warn('entity>>>2', entity)
+        const positions = entity.polyline.positions.getValue() // 获取坐标数组（Cartesian3）
+        console.warn('positions>>>2', positions)
+
+        // 提取起点和终点
+        const startCartesian = positions[0]
+        const endCartesian = positions[positions.length - 1]
+        // 转换为经纬度
+        const startCartographic =
+          Cesium.Cartographic.fromCartesian(startCartesian)
+        const endCartographic = Cesium.Cartographic.fromCartesian(endCartesian)
+        console.warn('startCartographic>>>2', startCartographic)
+        console.warn('endCartographic>>>2', endCartographic)
+
+        // const cartesian = entity.position.getValue(Cesium.JulianDate.now())
+        // const cartographic = Cesium.Cartographic.fromCartesian(cartesian)
+        // const lon = Cesium.Math.toDegrees(cartographic.longitude)
+        // const lat = Cesium.Math.toDegrees(cartographic.latitude)
+        // const height = cartographic.height
+        result.push({
+          start: {
+            lon: Cesium.Math.toDegrees(startCartographic.longitude),
+            lat: Cesium.Math.toDegrees(startCartographic.latitude),
+            height: startCartographic.height,
+          },
+          end: {
+            lon: Cesium.Math.toDegrees(endCartographic.longitude),
+            lat: Cesium.Math.toDegrees(endCartographic.latitude),
+            height: endCartographic.height,
+          },
+          entity: entity, // 可选：保留实体引用
+        })
+        // result.push({ lon, lat, height })
       }
     })
 

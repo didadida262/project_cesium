@@ -32,7 +32,7 @@
           v-if="item.key === BTNMap[1].key && currenModel === BTNMap[1].text"
           text="提交数据"
           classname="!h-[36px] !w-[100px]"
-          :on-click="exportPoint"
+          :on-click="exportData"
         />
       </div>
     </div>
@@ -54,8 +54,8 @@ import { BTNMap, options, MockPointData } from './const'
 
 const currenModel = ref('')
 
-const exportPoint = () => {
-  const res = CesiumController.exportPointData()
+const exportData = () => {
+  const res = CesiumController.exportData()
   console.log('导出数据>>>', res)
 }
 const handleClear = () => {
