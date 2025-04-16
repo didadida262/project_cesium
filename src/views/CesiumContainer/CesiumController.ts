@@ -183,6 +183,7 @@ export class CesiumController {
           outlineWidth: 2,
         },
       })
+      //   this.viewer.flyTo(pointEntity);
     })
   }
 }

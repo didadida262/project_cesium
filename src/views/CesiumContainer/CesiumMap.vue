@@ -81,7 +81,7 @@ const handleClickBTN = (btn: any) => {
 
 onMounted(() => {
   CesiumController.init_world('cesiumContainer')
-  //   CesiumController.drawPoints(MockPointData);
+  CesiumController.drawPoints(MockPointData)
 })
 </script>
 
