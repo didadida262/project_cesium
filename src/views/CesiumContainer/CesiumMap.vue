@@ -50,7 +50,7 @@ import 'cesium/Build/Cesium/Widgets/widgets.css'
 import Button from '../../components/ButtonComponent.vue'
 import Select from '../../components/SelectComponent.vue'
 import { CesiumController } from './CesiumController'
-import { BTNMap, options } from './const'
+import { BTNMap, options, MockPointData } from './const'
 
 const currenModel = ref('')
 
@@ -81,6 +81,7 @@ const handleClickBTN = (btn: any) => {
 
 onMounted(() => {
   CesiumController.init_world('cesiumContainer')
+  //   CesiumController.drawPoints(MockPointData);
 })
 </script>
 

@@ -323,7 +323,6 @@ export default class DrawTool {
   /**
    * 画点
    * @param p
-   * @private
    */
   _addPoint(p) {
     const point = this.viewer.entities.add({

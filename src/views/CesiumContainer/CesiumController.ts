@@ -165,4 +165,24 @@ export class CesiumController {
       },
     })
   }
+  static drawPoints(points: any) {
+    points.forEach((point: any) => {
+      // 添加点实体
+      if (!this.viewer) return
+      const pointEntity = this.viewer.entities.add({
+        name: '我的点',
+        position: Cesium.Cartesian3.fromDegrees(
+          point.lon, // 经度
+          point.lat, // 纬度
+          point.height, // 高度（米）
+        ),
+        point: {
+          color: Cesium.Color.RED,
+          pixelSize: 10,
+          outlineColor: Cesium.Color.YELLOW,
+          outlineWidth: 2,
+        },
+      })
+    })
+  }
 }
