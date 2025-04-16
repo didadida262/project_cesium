@@ -1,9 +1,9 @@
 import * as Cesium from 'cesium'
-import DrawTool from './drawGraphic.js'
+import PointTool from './tools/PointTool'
 
 export class CesiumController {
   static viewer: Cesium.Viewer | null | undefined
-  static drawTool: DrawTool | null | undefined
+  static drawTool: any
 
   // 台南和台北的坐标
   static tainanPosition = Cesium.Cartesian3.fromDegrees(120.213, 22.997) // 台南
@@ -37,7 +37,7 @@ export class CesiumController {
     (window as any).viewer = this.viewer
   }
   static exportPointData() {
-    const res = this.drawTool && this.drawTool.exportPointData()
+    const res = this.drawTool && this.drawTool.exportData()
     return res
   }
   static flyToTaiwan() {
@@ -88,13 +88,19 @@ export class CesiumController {
     this.drawTool && this.drawTool.clearAll()
   }
   static clearAllPoints() {
-    this.drawTool && this.drawTool.clearPoints()
+    this.drawTool && this.drawTool.clear()
   }
   static mark(type: string) {
-    this.drawTool = new DrawTool(this.viewer)
-    this.drawTool.activate(type, (data: any) => {
-      console.log('>>>>>')
-    })
+    switch (type) {
+      case 'Point':
+        this.drawTool = new PointTool(this.viewer)
+        this.drawTool.activate(type, (data: any) => {
+          console.log('data')
+        })
+        break
+      default:
+        break
+    }
   }
   static async showSituation() {
     await this.setupModelAnimation()

@@ -19,6 +19,11 @@ export const options = [
     key: 'Point',
   },
   //   {
+  //     label: "绘制线段",
+  //     key: "Polyline",
+  //   },
+
+  //   {
   //     label: "绘制区域",
   //     key: "Polygon",
   //   },

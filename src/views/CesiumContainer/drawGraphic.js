@@ -22,8 +22,8 @@ export default class DrawTool {
   activate(drawType, callback) {
     this.clearAll()
     this._drawType = drawType
-    this._dataSource = new Cesium.CustomDataSource('_dataSource')
-    this.viewer.dataSources.add(this._dataSource)
+    // this._dataSource = new Cesium.CustomDataSource('_dataSource')
+    // this.viewer.dataSources.add(this._dataSource)
     this._registerEvents(callback) //注册鼠标事件
   }
 
@@ -44,16 +44,18 @@ export default class DrawTool {
         this._leftClickEventForPolyline()
         this._mouseMoveEventForPolyline()
         this._rightClickEventForPolyline()
-        this._doubleClickEventForPolyline()
+        // this._doubleClickEventForPolyline()
         break
       }
       case 'Polygon': {
         this._leftClickEventForPolygon()
         this._mouseMoveEventForPolygon()
         this._rightClickEventForPolygon(callback)
-        this._doubleClickEventForPolygon(callback)
+        // this._doubleClickEventForPolygon(callback)
         break
       }
+      default:
+        break
     }
   }
 
@@ -110,9 +112,9 @@ export default class DrawTool {
     this._drawHandler.setInputAction((e) => {
       let p = this.viewer.scene.pickPosition(e.position)
       if (!p) return
-      this._removeAllEvent()
-      this._dataSource.entities.removeAll()
-      this._dataSource.entities.add({
+      // this._removeAllEvent()
+      // this.viewer.entities.removeAll()
+      const line = this.viewer.entities.add({
         polyline: {
           positions: this._tempPositions,
           clampToGround: true, //贴地
@@ -125,6 +127,8 @@ export default class DrawTool {
           }),
         },
       })
+      this._tempPositions = []
+      this._drawnEntities.push(line)
     }, Cesium.ScreenSpaceEventType.RIGHT_CLICK)
   }
 
@@ -189,8 +193,8 @@ export default class DrawTool {
       if (!p) return
       this._tempPositions.push(this._tempPositions[0])
       this._removeAllEvent()
-      this._dataSource.entities.removeAll()
-      const polygonEntity = this._dataSource.entities.add({
+      this.viewer.entities.removeAll()
+      const polygonEntity = this.viewer.entities.add({
         polyline: {
           positions: this._tempPositions,
           clampToGround: true, //贴地
@@ -225,7 +229,7 @@ export default class DrawTool {
       if (!p) return
       this._tempPositions.push(this._tempPositions[0])
       this._removeAllEvent()
-      this._dataSource.entities.removeAll()
+      this.viewer.entities.removeAll()
       const polygonEntity = this._dataSource.entities.add({
         polyline: {
           positions: this._tempPositions,
@@ -293,7 +297,7 @@ export default class DrawTool {
     this._resetParams()
   }
   // 清除点
-  clearPoints() {
+  clear() {
     this._drawnEntities.forEach((entity) => {
       if (entity.name === 'point') {
         this.viewer.entities.remove(entity)
@@ -344,7 +348,7 @@ export default class DrawTool {
    * @private
    */
   _addPolyline() {
-    this._dataSource.entities.add({
+    this.viewer.entities.add({
       polyline: {
         positions: new Cesium.CallbackProperty(() => {
           let c = Array.from(this._tempPositions)
@@ -371,8 +375,11 @@ export default class DrawTool {
    */
   _addPolygon() {
     if (this._tempPositions.length == 1) {
+      console.log('1')
       //一个顶点+移动点
-      this._dataSource.entities.add({
+      this.viewer.entities.add({
+        id: 'polygon-' + Date.now(),
+        name: 'polygon',
         polyline: {
           positions: new Cesium.CallbackProperty(() => {
             let c = Array.from(this._tempPositions)
@@ -392,9 +399,11 @@ export default class DrawTool {
         },
       })
     } else {
-      this._dataSource.entities.removeAll()
+      console.log('2')
+
+      this.viewer.entities.removeAll()
       //两个顶点+移动点
-      this._dataSource.entities.add({
+      this.viewer.entities.add({
         polygon: {
           hierarchy: new Cesium.CallbackProperty(() => {
             let poss = Array.from(this._tempPositions)
