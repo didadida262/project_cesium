@@ -83,6 +83,9 @@ export class CesiumController {
   static clearAllMark() {
     this.drawTool && this.drawTool.clearAll()
   }
+  static clearAllPoints() {
+    this.drawTool && this.drawTool.clearPoints()
+  }
   static mark(type: string) {
     console.log('mark>>', type)
     this.drawTool = new DrawTool(this.viewer)

@@ -48,7 +48,7 @@ import { BTNMap, options } from './const'
 const currenModel = ref('')
 
 const handleClear = () => {
-  CesiumController.clearAllMark()
+  CesiumController.clearAllPoints()
 }
 const handleSelectMark = (item: any) => {
   console.log('handleSelectMark>>>', item)

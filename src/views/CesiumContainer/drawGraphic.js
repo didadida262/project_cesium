@@ -8,6 +8,7 @@ export default class DrawTool {
   constructor(viewer) {
     this.viewer = viewer
     this._drawHandler = null //事件
+    this._drawnEntities = []
     this._dataSource = null //存储entities
     this._tempPositions = [] //存储点集合
     this._mousePos = null //移动点
@@ -291,6 +292,15 @@ export default class DrawTool {
     this._removeAllEvent()
     this._resetParams()
   }
+  // 清除点
+  clearPoints() {
+    this._removeAllEvent()
+    this._drawnEntities.forEach((entity) => {
+      if (entity.name === 'point') {
+        this.viewer.entities.remove(entity)
+      }
+    })
+  }
 
   /**
    * 画点
@@ -298,7 +308,9 @@ export default class DrawTool {
    * @private
    */
   _addPoint(p) {
-    this.viewer.entities.add({
+    const point = this.viewer.entities.add({
+      id: 'point-' + Date.now(),
+      name: 'point',
       position: Cesium.Cartesian3.fromDegrees(p[0], p[1], p[2]),
       point: {
         color: Cesium.Color.RED,
@@ -308,6 +320,7 @@ export default class DrawTool {
         // heightReference:Cesium.HeightReference.CLAMP_TO_GROUND
       },
     })
+    this._drawnEntities.push(point)
   }
 
   /**
