@@ -10,7 +10,7 @@
       @click="setShow(!show)"
     >
       <span class="w-[80px] text-[13px] text-textThirdColor line-clamp-1">
-        {{ value.label }}
+        {{ value ? value.label : "" }}
       </span>
       <svg
         width="20"
@@ -55,7 +55,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 
 const props = defineProps<{
   options: any;
@@ -63,19 +63,25 @@ const props = defineProps<{
 }>()
 
 const show = ref(false)
-const value = ref(props.options[0])
+const value = ref(null) as any
 const activeValue = ref('')
 
 const setValue = (data: any) => {
   value.value = data
 }
 const handleClick = (item: any) => {
-  console.log('item>>>', item)
   setValue(item)
-  props.onClick(item)
   setShow(false)
 }
 const setShow = (type: boolean) => {
   show.value = type
 }
+onMounted(() => {
+  console.log('onMounted>>>')
+  setValue(props.options[0])
+})
+watch(value, () => {
+  console.log('watch>>>', value.value)
+  props.onClick(value.value)
+})
 </script>

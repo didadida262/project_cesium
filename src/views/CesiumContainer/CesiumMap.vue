@@ -40,10 +40,8 @@ import { CesiumController } from './CesiumController'
 import { BTNMap, options } from './const'
 
 const currenModel = ref('')
-const handleMark = () => {
-  CesiumController.markArea('Polygon')
-}
 const handleSelectMark = (item: any) => {
+  console.log('handleSelectMark>>>', item)
   CesiumController.markArea(item.key)
 }
 const handleClickBTN = (btn: any) => {
@@ -51,10 +49,6 @@ const handleClickBTN = (btn: any) => {
   switch (btn.key) {
     case 'jump':
       CesiumController.flyToTaiwan()
-      break
-
-    case 'markPoint':
-      CesiumController.markArea('Point')
       break
     case 'situation':
       CesiumController.showSituation()
