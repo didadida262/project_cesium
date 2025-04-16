@@ -7,3 +7,11 @@
 .markBorderR {
   border: 1px solid red;
 }
+
+.markBorderG {
+  border: 1px solid rgb(0, 234, 150);
+}
+
+.selected {
+  border: 3px solid rgb(0, 234, 150);
+}
