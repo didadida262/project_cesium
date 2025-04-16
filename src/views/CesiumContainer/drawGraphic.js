@@ -294,7 +294,6 @@ export default class DrawTool {
   }
   // 清除点
   clearPoints() {
-    this._removeAllEvent()
     this._drawnEntities.forEach((entity) => {
       if (entity.name === 'point') {
         this.viewer.entities.remove(entity)
