@@ -9,7 +9,7 @@
       <div
         v-for="item in BTNMap"
         :key="item.key"
-        @click="handleClickBTN(item.key)"
+        @click="handleClickBTN(item)"
       >
         <Button
           :text="item.text"
@@ -33,32 +33,19 @@ import { CesiumController } from './CesiumController'
 import { BTNMap } from './const'
 
 const currenModel = ref('')
-const handleClickBTN = (key: string) => {
-  switch (key) {
+const handleClickBTN = (btn: any) => {
+  currenModel.value = btn.text
+  switch (btn.key) {
     case 'jump':
-      handleJump()
+      CesiumController.flyToTaiwan()
       break
     case 'mark':
-      handleMark()
+      CesiumController.markArea()
       break
     case 'situation':
-      handleSituation()
+      CesiumController.showSituation()
       break
   }
-}
-const handleSituation = async () => {
-  currenModel.value = '动态演示'
-  CesiumController.showSituation()
-}
-const handleMark = () => {
-  currenModel.value = '标注'
-  CesiumController.markArea()
-
-  //   drawTool.activate("Polyline");
-}
-const handleJump = () => {
-  currenModel.value = '跳转至目标地点'
-  CesiumController.flyToTaiwan()
 }
 
 onMounted(() => {
