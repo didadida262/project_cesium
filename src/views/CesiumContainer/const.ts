@@ -14,14 +14,14 @@ export const BTNMap = [
   },
 ]
 export const options = [
-  {
-    label: '绘制点',
-    key: 'Point',
-  },
   //   {
-  //     label: "绘制线段",
-  //     key: "Polyline",
+  //     label: '绘制点',
+  //     key: 'Point',
   //   },
+  {
+    label: '绘制线段',
+    key: 'Polyline',
+  },
 
   //   {
   //     label: "绘制区域",

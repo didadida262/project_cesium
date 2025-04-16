@@ -56,8 +56,8 @@ export default class DrawTool {
    */
   _addPoint(p) {
     const point = this.viewer.entities.add({
-      id: 'Point-' + Date.now(),
-      name: 'Point',
+      id: this.name + Date.now(),
+      name: this.name,
       position: Cesium.Cartesian3.fromDegrees(p[0], p[1], p[2]),
       point: {
         color: Cesium.Color.RED,
@@ -89,10 +89,12 @@ export default class DrawTool {
       (this._drawHandler = null))
   }
 
-  // 清除点
+  // 清除数据
   clear() {
     this._drawnEntities.forEach((entity) => {
-      this.viewer.entities.remove(entity)
+      if (entity.name === this.name) {
+        this.viewer.entities.remove(entity)
+      }
     })
   }
 

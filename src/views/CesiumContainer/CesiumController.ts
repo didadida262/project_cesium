@@ -1,6 +1,6 @@
 import * as Cesium from 'cesium'
 import PointTool from './tools/PointTool'
-
+import Polyline from './tools/Polyline'
 export class CesiumController {
   static viewer: Cesium.Viewer | null | undefined
   static drawTool: any
@@ -94,6 +94,12 @@ export class CesiumController {
     switch (type) {
       case 'Point':
         this.drawTool = new PointTool(this.viewer)
+        this.drawTool.activate(type, (data: any) => {
+          console.log('data')
+        })
+        break
+      case 'Polyline':
+        this.drawTool = new Polyline(this.viewer)
         this.drawTool.activate(type, (data: any) => {
           console.log('data')
         })
