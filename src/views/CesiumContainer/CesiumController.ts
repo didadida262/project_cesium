@@ -97,8 +97,6 @@ export class CesiumController {
   }
   static handleAttack(type: string) {
     Arrow.draw(type)
-    // Arrow.draw("attackArrow");
-    // Arrow.draw("pincerArrow");
   }
   static mark(type: string) {
     this.drawTool && this.drawTool._removeAllEvent()
@@ -153,7 +151,7 @@ export class CesiumController {
       model: {
         uri: '/models/Cesium_Air.glb', // 替换为你的模型路径
         minimumPixelSize: 64,
-        maximumScale: 20000,
+        maximumScale: 200000,
       },
       path: {
         leadTime: 0,
@@ -166,6 +164,7 @@ export class CesiumController {
         }),
       },
     })
+
     modelEntity.orientation = new Cesium.VelocityOrientationProperty(
       modelEntity.position as Cesium.SampledPositionProperty,
     )
