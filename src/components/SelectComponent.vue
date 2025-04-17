@@ -30,19 +30,19 @@
         />
       </svg>
     </div>
-    <ul
+    <div
       :class="[
-        'absolute top-[40px] max-h-[144px] w-full flex-col overflow-y-auto rounded-[4px] border-[1px] border-solid border-[#262B33] bg-[#141519] duration-300',
+        'absolute top-[40px]  w-full  overflow-y-auto rounded-[4px] border-[1px] border-solid border-[#262B33] bg-[#141519] duration-300',
         'chain-select',
-
+        'flex flex-col justify-start items-center ',
         show ? 'z-10 flex opacity-100 shadow-common' : '-z-10 hidden opacity-0',
       ]"
     >
-      <li
+      <div
         v-for="(item, index) in options"
         :key="index"
         :class="[
-          `flex h-[36px] cursor-pointer items-center gap-x-[6px] overflow-y-auto pl-4 text-textFifthSize hover:bg-[#1d2024]`,
+          `w-full flex h-[36px] cursor-pointer items-center overflow-y-auto px-4 text-textFifthSize hover:bg-[#1d2024]`,
           item.value === activeValue && 'bg-[#1d2024]',
         ]"
         @click="handleClick(item)"
@@ -50,8 +50,8 @@
         <span class="text-textFifthSize text-textSixColor">
           {{ item.label }}
         </span>
-      </li>
-    </ul>
+      </div>
+    </div>
   </div>
 </template>
 
