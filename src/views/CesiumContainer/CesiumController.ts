@@ -2,6 +2,9 @@ import * as Cesium from 'cesium'
 import PointTool from './tools/PointTool'
 import Polyline from './tools/Polyline'
 import LineTool from './tools/LineTool'
+import StragitArrowTool from './tools/StragitArrowTool'
+import Arrow from './tools/drawArrow/drawPlot'
+
 export class CesiumController {
   static viewer: Cesium.Viewer | null | undefined
   static drawTool: any
@@ -36,6 +39,7 @@ export class CesiumController {
     // 显示帧率
     this.viewer.scene.debugShowFramesPerSecond = true;
     (window as any).viewer = this.viewer
+    Arrow.init(this.viewer)
   }
   static exportData() {
     const res = this.drawTool && this.drawTool.exportData()
@@ -91,6 +95,11 @@ export class CesiumController {
   static clearAllPoints() {
     this.drawTool && this.drawTool.clear()
   }
+  static handleAttack(type: string) {
+    Arrow.draw(type)
+    // Arrow.draw("attackArrow");
+    // Arrow.draw("pincerArrow");
+  }
   static mark(type: string) {
     this.drawTool && this.drawTool._removeAllEvent()
     switch (type) {
@@ -111,6 +120,22 @@ export class CesiumController {
         this.drawTool.activate(type, (data: any) => {
           console.log('data')
         })
+        break
+      case 'StraightArrow':
+        // =方案一
+        this.handleAttack('straightArrow')
+        // =方案二
+        // this.drawTool = new StragitArrowTool(this.viewer);
+        // console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>");
+        // this.drawTool.activate(type, (data: any) => {
+        //   console.log("data");
+        // });
+        break
+      case 'AttackArrow':
+        this.handleAttack('attackArrow')
+        break
+      case 'PincerArrow':
+        this.handleAttack('pincerArrow')
         break
       default:
         break
