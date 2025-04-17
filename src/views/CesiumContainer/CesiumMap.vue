@@ -59,7 +59,7 @@ const exportData = () => {
   console.log('导出数据>>>', res)
 }
 const handleClear = () => {
-  CesiumController.clearAllPoints()
+  CesiumController.clearAllMark()
 }
 const handleSelectMark = (item: any) => {
   console.log('handleSelectMark>>>', item)

@@ -1,6 +1,7 @@
 import * as Cesium from 'cesium'
 import PointTool from './tools/PointTool'
 import Polyline from './tools/Polyline'
+import LineTool from './tools/LineTool'
 export class CesiumController {
   static viewer: Cesium.Viewer | null | undefined
   static drawTool: any
@@ -85,12 +86,13 @@ export class CesiumController {
     })
   }
   static clearAllMark() {
-    this.drawTool && this.drawTool.clearAll()
+    this.drawTool && this.drawTool.clear()
   }
   static clearAllPoints() {
     this.drawTool && this.drawTool.clear()
   }
   static mark(type: string) {
+    this.drawTool && this.drawTool._removeAllEvent()
     switch (type) {
       case 'Point':
         this.drawTool = new PointTool(this.viewer)
@@ -100,6 +102,12 @@ export class CesiumController {
         break
       case 'Polyline':
         this.drawTool = new Polyline(this.viewer)
+        this.drawTool.activate(type, (data: any) => {
+          console.log('data')
+        })
+        break
+      case 'Line':
+        this.drawTool = new LineTool(this.viewer)
         this.drawTool.activate(type, (data: any) => {
           console.log('data')
         })

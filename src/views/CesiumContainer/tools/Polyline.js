@@ -30,6 +30,7 @@ export default class DrawTool {
 
   // 清除数据
   clear() {
+    console.log('_drawnEntities>>>>', this._drawnEntities)
     this._drawnEntities.forEach((entity) => {
       if (entity.name === this.name) {
         this.viewer.entities.remove(entity)
