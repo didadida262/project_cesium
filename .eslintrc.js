@@ -14,6 +14,15 @@ module.exports = {
     ecmaVersion: 2018,
   },
   rules: {
+    '@typescript-eslint/ban-types': [
+      'error',
+      {
+        extendDefaults: true,
+        types: {
+          Function: false, // 禁用对 Function 的报错
+        },
+      },
+    ],
     '@typescript-eslint/no-this-alias': 'off',
     'comma-dangle': ['error', 'always-multiline'],
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
