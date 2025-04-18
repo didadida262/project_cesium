@@ -2,11 +2,12 @@ import * as Cesium from 'cesium'
 import PointTool from './tools/PointTool'
 import Polyline from './tools/Polyline'
 import LineTool from './tools/LineTool'
+import IconTool from './tools/IconTool'
+
 import StragitArrowTool from './tools/StragitArrowTool'
 import Arrow from './tools/drawArrow/drawPlot'
-
 export class CesiumController {
-  static viewer: Cesium.Viewer | null | undefined
+  static viewer: Cesium.Viewer
   static drawTool: any
 
   // 台南和台北的坐标
@@ -103,6 +104,12 @@ export class CesiumController {
     switch (type) {
       case 'Point':
         this.drawTool = new PointTool(this.viewer)
+        this.drawTool.activate(type, (data: any) => {
+          console.log('data')
+        })
+        break
+      case 'PointIcon':
+        this.drawTool = new IconTool(this.viewer)
         this.drawTool.activate(type, (data: any) => {
           console.log('data')
         })
