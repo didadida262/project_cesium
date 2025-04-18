@@ -8,7 +8,7 @@ export default {
     commonjsOptions: {
       strictRequires: true, // 兼容commonjs
     },
-    outDir: 'docs',
+    outDir: 'dist',
     rollupOptions: {
       plugins: {
         // 重写静态资源路径
