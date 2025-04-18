@@ -1,5 +1,6 @@
 import * as Cesium from 'cesium'
 import { xp } from './algorithm'
+import { showPoint } from '../../CesiumUtils'
 
 var StraightArrow = function (viewer) {
   this.type = 'StraightArrow'
@@ -71,6 +72,7 @@ StraightArrow.prototype = {
     var $this = this
     this.state = 1
     this.handler.setInputAction(function (evt) {
+      console.log('left_click>>>>')
       //单机开始绘制
       var cartesian
       cartesian = getCatesian3FromPX(evt.position, $this.viewer)
@@ -81,17 +83,25 @@ StraightArrow.prototype = {
         $this.floatPoint = $this.creatPoint(cartesian)
         $this.floatPoint.type = 'floatPoint'
         $this.positions.push(cartesian)
+        $this.positions.push(cartesian.clone())
       }
       if ($this.positions.length == 3) {
+        console.warn('3')
         $this.firstPoint.show = false
         $this.floatPoint.show = false
         $this.handler.destroy()
         $this.arrowEntity.objId = $this.objId
         $this.state = -1
+        // console.log('showArrowOnMap-positions>>>', $this.positions)
+        // $this.positions.forEach(element => {
+        //     showPoint($this.viewer, element)
+        // });
       }
-      $this.positions.push(cartesian.clone())
+      console.warn('0>>>', $this.positions)
     }, Cesium.ScreenSpaceEventType.LEFT_CLICK)
     this.handler.setInputAction(function (evt) {
+      console.log('move>>>', $this.positions)
+
       //移动时绘制面
       if ($this.positions.length < 1) return
       var cartesian
@@ -100,10 +110,15 @@ StraightArrow.prototype = {
 
       $this.floatPoint.position.setValue(cartesian)
       if ($this.positions.length >= 2) {
+        console.warn('1>>>', $this.positions)
+
         if (!Cesium.defined($this.arrowEntity)) {
           $this.positions.push(cartesian)
+          console.warn('创建path>>>')
           $this.arrowEntity = $this.showArrowOnMap($this.positions)
         } else {
+          console.warn('更新path>>>')
+
           $this.positions.pop()
           $this.positions.push(cartesian)
         }

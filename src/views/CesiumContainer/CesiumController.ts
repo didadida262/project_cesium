@@ -121,20 +121,23 @@ export class CesiumController {
         break
       case 'StraightArrow':
         // =方案一
-        this.handleAttack('straightArrow')
+        // this.handleAttack('straightArrow')
         // =方案二
-        // this.drawTool = new StragitArrowTool(this.viewer);
-        // console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>");
-        // this.drawTool.activate(type, (data: any) => {
-        //   console.log("data");
-        // });
+        this.drawTool = new StragitArrowTool(this.viewer)
+        this.drawTool.activate(type, (data: any) => {
+          console.log('data')
+        })
         break
-      case 'AttackArrow':
-        this.handleAttack('attackArrow')
-        break
-      case 'PincerArrow':
-        this.handleAttack('pincerArrow')
-        break
+      //   case "StraightArrow":
+      //     // =方案一
+      //     this.handleAttack("straightArrow");
+      //     break;
+      //   case "AttackArrow":
+      //     this.handleAttack("attackArrow");
+      //     break;
+      //   case "PincerArrow":
+      //     this.handleAttack("pincerArrow");
+      //     break;
       default:
         break
     }

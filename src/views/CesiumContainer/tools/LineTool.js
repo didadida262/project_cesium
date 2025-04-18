@@ -127,7 +127,7 @@ export default class DrawTool {
           return c
         }, false),
         clampToGround: true, //贴地
-        width: 3,
+        width: 8,
         material: new Cesium.ColorMaterialProperty(
           Cesium.Color.RED.withAlpha(0.5),
         ),
@@ -144,7 +144,7 @@ export default class DrawTool {
       polyline: {
         positions: this._tempPositions,
         clampToGround: true, //贴地
-        width: 3,
+        width: 8,
         material: new Cesium.ColorMaterialProperty(
           Cesium.Color.RED.withAlpha(0.5),
         ),

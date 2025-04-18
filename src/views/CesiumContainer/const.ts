@@ -26,14 +26,18 @@ export const options = [
     label: '直线箭头',
     key: 'StraightArrow',
   },
-  {
-    label: '攻击箭头',
-    key: 'AttackArrow',
-  },
-  {
-    label: '钳形箭头',
-    key: 'PincerArrow',
-  },
+  //   {
+  //     label: "直线箭头",
+  //     key: "StraightArrow",
+  //   },
+  //   {
+  //     label: "攻击箭头",
+  //     key: "AttackArrow",
+  //   },
+  //   {
+  //     label: "钳形箭头",
+  //     key: "PincerArrow",
+  //   },
 
   //   {
   //     label: "绘制多段线",

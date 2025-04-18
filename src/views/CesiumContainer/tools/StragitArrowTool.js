@@ -1,5 +1,7 @@
 import * as Cesium from 'cesium'
 import ms from 'milsymbol'
+import { getCatesian3FromPX, cartesianToLatlng } from '../CesiumUtils'
+import { xp } from './drawArrow/algorithm'
 
 export default class DrawTool {
   /**
@@ -13,6 +15,22 @@ export default class DrawTool {
     this._drawnEntities = []
     this._tempPositions = [] //存储点集合
     this.temppath = null
+    this.fillMaterial = Cesium.Color.YELLOW.withAlpha(0.8)
+    this.firstPoint = null
+    this.floatPoint = null
+    this.positions = []
+    this.arrowEntity = null
+  }
+  /**
+   * 注册鼠标事件
+   */
+  _registerEvents(callback) {
+    this._drawHandler = new Cesium.ScreenSpaceEventHandler(
+      this.viewer.scene.canvas,
+    )
+    this.viewer.scene.globe.depthTestAgainstTerrain = true //开启深度测试
+    this._leftClickEventForPolyline()
+    this._mouseMoveEventForPolyline()
   }
 
   _removeAllEvent() {
@@ -82,17 +100,42 @@ export default class DrawTool {
   }
 
   /**
-   * 注册鼠标事件
+   * 绘制
+   * @private
    */
-  _registerEvents(callback) {
-    this._drawHandler = new Cesium.ScreenSpaceEventHandler(
-      this.viewer.scene.canvas,
-    )
-    this.viewer.scene.globe.depthTestAgainstTerrain = true //开启深度测试
-    // Arrow.draw("straightArrow");
+  showArrowOnMap(positions) {
+    const that = this
+    const update = function () {
+      console.log('update>>>>>>>>>')
+      if (positions.length < 2) {
+        return null
+      }
+      const p1 = positions[1]
+      const p2 = positions[2]
+      const firstPoint = cartesianToLatlng(that.viewer, p1)
+      const endPoints = cartesianToLatlng(that.viewer, p2)
 
-    // this._leftClickEventForPolyline()
-    // this._mouseMoveEventForPolyline()
+      const arrow = []
+      const res = xp.algorithm.fineArrow(
+        [firstPoint[0], firstPoint[1]],
+        [endPoints[0], endPoints[1]],
+      )
+      const index = JSON.stringify(res).indexOf('null')
+      if (index != -1) return []
+      for (let i = 0; i < res.length; i++) {
+        let c3 = new Cesium.Cartesian3(res[i].x, res[i].y, res[i].z)
+        arrow.push(c3)
+      }
+      return new Cesium.PolygonHierarchy(arrow)
+    }
+    return that.viewer.entities.add({
+      polygon: new Cesium.PolygonGraphics({
+        hierarchy: new Cesium.CallbackProperty(update, false),
+        show: true,
+        fill: true,
+        material: this.fillMaterial,
+      }),
+    })
   }
 
   drawSymbol(p) {
@@ -121,17 +164,59 @@ export default class DrawTool {
     })
   }
 
+  creatPoint(cartesian) {
+    const point = this.viewer.entities.add({
+      position: cartesian,
+      billboard: {
+        image: this.pointImageUrl,
+        verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
+        //heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
+        disableDepthTestDistance: Number.POSITIVE_INFINITY,
+      },
+    })
+    point.attr = 'editPoint'
+    return point
+  }
   /**
    * 鼠标事件之绘制线的左击事件
    * @private
    */
   _leftClickEventForPolyline() {
-    console.log('_leftClickEventForPolyline>>>')
     this._drawHandler.setInputAction((e) => {
-      let p = this.viewer.scene.pickPosition(e.position)
-      if (!p) return
-      this._tempPositions.push(p)
-      this._drawPath()
+      //单机开始绘制
+
+      const cartesian = getCatesian3FromPX(e.position, this.viewer)
+      if (!cartesian) return
+      console.log('cartesian>>>', cartesian)
+      if (this.positions.length == 0) {
+        console.warn('触发1>>>>>>>>>>>>>')
+        this.firstPoint = this.creatPoint(cartesian)
+        this.firstPoint.type = 'firstPoint'
+        this.floatPoint = this.creatPoint(cartesian)
+        this.floatPoint.type = 'floatPoint'
+        this.positions.push(cartesian)
+        this.positions.push(cartesian.clone())
+      }
+      if (this.positions.length == 3) {
+        console.warn('触发2>>>>>>>>>>>>>')
+        this.firstPoint.show = false
+        this.floatPoint.show = false
+        this.positions = []
+        const clonedEntity = new Cesium.Entity({
+          polygon: {
+            hierarchy: this.arrowEntity.polygon.hierarchy,
+            material: this.arrowEntity.polygon.material,
+            show: this.arrowEntity.polygon.show,
+            fill: this.arrowEntity.polygon.fill,
+          },
+          name: this.arrowEntity.name, // 复制其他属性
+        })
+        // 3. 添加到场景
+        this.viewer.entities.add(clonedEntity)
+        this._drawnEntities.push(clonedEntity)
+        this.viewer.entities.remove(this.arrowEntity)
+        this.arrowEntity = null
+      }
     }, Cesium.ScreenSpaceEventType.LEFT_CLICK)
   }
 
@@ -194,9 +279,20 @@ export default class DrawTool {
    */
   _mouseMoveEventForPolyline() {
     this._drawHandler.setInputAction((e) => {
-      let p = this.viewer.scene.pickPosition(e.endPosition)
-      if (!p) return
-      this._mousePos = p
+      //移动时绘制面
+      if (this.positions.length < 1) return
+      const cartesian = getCatesian3FromPX(e.endPosition, this.viewer)
+      if (!cartesian) return
+      this.floatPoint.position.setValue(cartesian)
+      if (this.positions.length >= 2) {
+        if (!Cesium.defined(this.arrowEntity)) {
+          this.positions.push(cartesian)
+          this.arrowEntity = this.showArrowOnMap(this.positions)
+        } else {
+          this.positions.pop()
+          this.positions.push(cartesian)
+        }
+      }
     }, Cesium.ScreenSpaceEventType.MOUSE_MOVE)
   }
 }
