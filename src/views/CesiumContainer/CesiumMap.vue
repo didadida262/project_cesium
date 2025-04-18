@@ -22,22 +22,22 @@
             :curren-model="currenModel"
           />
           <Select
-            v-if="item.key === BTNMap[1].key && currenModel === 'mark'"
+            v-if="item.key === 'mark' && currenModel === 'mark'"
             :options="options"
             :on-click="handleSelectMark"
           />
 
           <Button
-            v-if="item.key === BTNMap[1].key && currenModel === 'mark'"
+            v-if="item.key === 'mark' && currenModel === 'mark'"
             :data="{ text: '清除' }"
             classname="!h-[36px] !w-[100px]"
-            :on-click="handleClear"
+            @click.stop="handleClear"
           />
           <Button
-            v-if="item.key === BTNMap[1].key && currenModel === 'mark'"
+            v-if="item.key === 'mark' && currenModel === 'mark'"
             :data="{ text: '提交数据' }"
             classname="!h-[36px] !w-[100px]"
-            :on-click="exportData"
+            @click.stop="exportData"
           />
         </div>
       </div>
@@ -80,11 +80,13 @@ const exportData = () => {
 const handleClear = () => {
   CesiumController.clearAllMark()
 }
-const handleSelectMark = (item: any) => {
+const handleSelectMark = (e: any, item: any) => {
+  e.stopPropagation()
   console.log('handleSelectMark>>>', item)
   CesiumController.mark(item.key)
 }
 const handleClickBTN = (btn: any) => {
+  console.log('handleClickBTN')
   if (currenModel.value === btn.key) {
     currenModel.value = ''
     return

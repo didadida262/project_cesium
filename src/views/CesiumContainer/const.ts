@@ -3,10 +3,10 @@ export const BTNMap = [
     text: '打点模式',
     key: 'drawFlag',
   },
-  //   {
-  //     text: "标注模式",
-  //     key: "mark",
-  //   },
+  {
+    text: '标注模式',
+    key: 'mark',
+  },
   {
     text: '动效演示',
     key: 'situation',

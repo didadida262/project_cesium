@@ -45,7 +45,7 @@
           `w-full flex h-[36px] cursor-pointer items-center overflow-y-auto px-4 text-textFifthSize hover:bg-[#1d2024]`,
           item.value === activeValue && 'bg-[#1d2024]',
         ]"
-        @click="handleClick(item)"
+        @click.stop="handleClick(item)"
       >
         <span class="text-textFifthSize text-textSixColor">
           {{ item.label }}

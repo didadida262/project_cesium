@@ -9,7 +9,6 @@
         : 'bg-[rgb(18,20,22)]',
       classname,
     ]"
-    @click="onClick"
   >
     {{ data.text }}
   </div>
@@ -20,6 +19,5 @@ const props = defineProps<{
   data: any;
   classname?: string;
   currenModel?: string;
-  onClick?: () => void;
 }>()
 </script>
