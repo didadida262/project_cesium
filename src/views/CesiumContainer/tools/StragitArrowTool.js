@@ -61,32 +61,9 @@ export default class DrawTool {
   // 导出数据
   exportData() {
     const result = []
-    this._drawnEntities.forEach((entity) => {
-      if (entity.name === this.name && entity.polyline.positions) {
-        const positions = entity.polyline.positions.getValue() // 获取坐标数组（Cartesian3）
-        // 提取起点和终点
-        const startCartesian = positions[0]
-        const endCartesian = positions[positions.length - 1]
-        // 转换为经纬度
-        const startCartographic =
-          Cesium.Cartographic.fromCartesian(startCartesian)
-        const endCartographic = Cesium.Cartographic.fromCartesian(endCartesian)
+    // this._drawnEntities.forEach((entity) => {
 
-        result.push({
-          start: {
-            lon: Cesium.Math.toDegrees(startCartographic.longitude),
-            lat: Cesium.Math.toDegrees(startCartographic.latitude),
-            height: startCartographic.height,
-          },
-          end: {
-            lon: Cesium.Math.toDegrees(endCartographic.longitude),
-            lat: Cesium.Math.toDegrees(endCartographic.latitude),
-            height: endCartographic.height,
-          },
-          entity: entity, // 可选：保留实体引用
-        })
-      }
-    })
+    // })
 
     return result
   }
@@ -106,7 +83,6 @@ export default class DrawTool {
   showArrowOnMap(positions) {
     const that = this
     const update = function () {
-      console.log('update>>>>>>>>>')
       if (positions.length < 2) {
         return null
       }
@@ -129,38 +105,14 @@ export default class DrawTool {
       return new Cesium.PolygonHierarchy(arrow)
     }
     return that.viewer.entities.add({
+      id: `${this.name}${Date.now()}`,
+      name: this.name,
       polygon: new Cesium.PolygonGraphics({
         hierarchy: new Cesium.CallbackProperty(update, false),
         show: true,
         fill: true,
         material: this.fillMaterial,
       }),
-    })
-  }
-
-  drawSymbol(p) {
-    // 绘制军事符号
-
-    // 1. 创建符号
-    const symbol = new ms.Symbol('SFG-UCI----D', {
-      size: 30,
-      fillColor: '#00FFFF', // 友军蓝色
-      strokeColor: '#000000',
-    })
-
-    // 2. 添加到Cesium
-    this.viewer.entities.add({
-      position: p,
-      billboard: {
-        image: symbol.toDataURL(),
-        scale: 2,
-        verticalOrigin: Cesium.VerticalOrigin.CENTER,
-      },
-      label: {
-        text: '指挥中心',
-        font: '14pt sans-serif',
-        fillColor: Cesium.Color.WHITE,
-      },
     })
   }
 
@@ -183,95 +135,8 @@ export default class DrawTool {
    */
   _leftClickEventForPolyline() {
     this._drawHandler.setInputAction((e) => {
-      //单机开始绘制
-
-      const cartesian = getCatesian3FromPX(e.position, this.viewer)
-      if (!cartesian) return
-      console.log('cartesian>>>', cartesian)
-      if (this.positions.length == 0) {
-        console.warn('触发1>>>>>>>>>>>>>')
-        this.firstPoint = this.creatPoint(cartesian)
-        this.firstPoint.type = 'firstPoint'
-        this.floatPoint = this.creatPoint(cartesian)
-        this.floatPoint.type = 'floatPoint'
-        this.positions.push(cartesian)
-        this.positions.push(cartesian.clone())
-      }
-      if (this.positions.length == 3) {
-        console.warn('触发2>>>>>>>>>>>>>')
-        this.firstPoint.show = false
-        this.floatPoint.show = false
-        this.positions = []
-        const clonedEntity = new Cesium.Entity({
-          polygon: {
-            hierarchy: this.arrowEntity.polygon.hierarchy,
-            material: this.arrowEntity.polygon.material,
-            show: this.arrowEntity.polygon.show,
-            fill: this.arrowEntity.polygon.fill,
-          },
-          name: this.arrowEntity.name, // 复制其他属性
-        })
-        // 3. 添加到场景
-        this.viewer.entities.add(clonedEntity)
-        this._drawnEntities.push(clonedEntity)
-        this.viewer.entities.remove(this.arrowEntity)
-        this.arrowEntity = null
-      }
+      this._drawPath(e)
     }, Cesium.ScreenSpaceEventType.LEFT_CLICK)
-  }
-
-  /**
-   * 画线
-   * @private
-   */
-  _drawPath() {
-    if (this._tempPositions.length === 1) {
-      this._drawTempPath()
-    } else {
-      this._drawFinalPath()
-    }
-  }
-  _drawTempPath() {
-    this.temppath = this.viewer.entities.add({
-      polyline: {
-        positions: new Cesium.CallbackProperty(() => {
-          let c = Array.from(this._tempPositions)
-          if (this._mousePos) {
-            c.push(this._mousePos)
-          }
-          return c
-        }, false),
-        clampToGround: true, //贴地
-        width: 3,
-        material: new Cesium.ColorMaterialProperty(
-          Cesium.Color.RED.withAlpha(0.5),
-        ),
-        depthFailMaterial: new Cesium.PolylineDashMaterialProperty({
-          color: Cesium.Color.YELLOW,
-        }),
-      },
-    })
-  }
-  _drawFinalPath() {
-    const line = this.viewer.entities.add({
-      id: this.name + Date.now(),
-      name: this.name,
-      polyline: {
-        positions: this._tempPositions,
-        clampToGround: true, //贴地
-        width: 3,
-        material: new Cesium.ColorMaterialProperty(
-          Cesium.Color.RED.withAlpha(0.5),
-        ),
-        depthFailMaterial: new Cesium.PolylineDashMaterialProperty({
-          color: Cesium.Color.YELLOW,
-        }),
-      },
-    })
-    this._tempPositions = []
-    this.viewer.entities.remove(this.temppath)
-    this.temppath = null
-    this._drawnEntities.push(line)
   }
   /**
    * 鼠标事件之绘制线的移动事件
@@ -295,4 +160,45 @@ export default class DrawTool {
       }
     }, Cesium.ScreenSpaceEventType.MOUSE_MOVE)
   }
+  /**
+   * 画线
+   * @private
+   */
+  _drawPath(e) {
+    const cartesian = getCatesian3FromPX(e.position, this.viewer)
+    if (!cartesian) return
+    if (this.positions.length == 0) {
+      this.firstPoint = this.creatPoint(cartesian)
+      this.firstPoint.type = 'firstPoint'
+      this.floatPoint = this.creatPoint(cartesian)
+      this.floatPoint.type = 'floatPoint'
+      this.positions.push(cartesian)
+      this.positions.push(cartesian.clone())
+    }
+    if (this.positions.length == 3) {
+      this.firstPoint.show = false
+      this.floatPoint.show = false
+      this.positions = []
+      const clonedEntity = new Cesium.Entity({
+        polygon: {
+          hierarchy: this.arrowEntity.polygon.hierarchy,
+          material: this.arrowEntity.polygon.material,
+          show: this.arrowEntity.polygon.show,
+          fill: this.arrowEntity.polygon.fill,
+        },
+        name: this.arrowEntity.name, // 复制其他属性
+      })
+      // 3. 添加到场景
+      this.viewer.entities.add(clonedEntity)
+      this._drawnEntities.push(clonedEntity)
+      this.viewer.entities.remove(this.arrowEntity)
+      this.arrowEntity = null
+    }
+  }
+  // _drawTempPath() {
+
+  // }
+  // _drawFinalPath() {
+
+  // }
 }
