@@ -18,7 +18,7 @@ export default class DrawTool {
    * @param viewer Cesium 查看器实例
    */
   constructor(viewer: Cesium.Viewer) {
-    this.name = 'Point'
+    this.name = 'IconTool'
     this.viewer = viewer
     this._drawHandler = null // 事件处理器
     this._drawnEntities = [] // 存储绘制的实体
@@ -77,12 +77,22 @@ export default class DrawTool {
       id: `${this.name}${Date.now()}`,
       name: this.name,
       position: Cesium.Cartesian3.fromDegrees(p[0], p[1], p[2]),
-      point: {
-        color: Cesium.Color.RED,
-        pixelSize: 10,
-        outlineColor: Cesium.Color.YELLOW,
-        outlineWidth: 2,
-        // heightReference: Cesium.HeightReference.CLAMP_TO_GROUND
+      billboard: {
+        image: '/images/icon/flagRed.svg', // 替换成你自己的图标
+        scale: 1.2,
+        // color: Cesium.Color.GREEN, // 设置为红色
+
+        // 根据相机距离自动缩放（距离近大，距离远小）
+        scaleByDistance: new Cesium.NearFarScalar(
+          100.0,
+          1.5, // 100 米内放大 1.5 倍
+          10000.0,
+          0.3, // 超过 10000 米缩小到 0.3 倍
+        ),
+        verticalOrigin: Cesium.VerticalOrigin.CENTER,
+        horizontalOrigin: Cesium.HorizontalOrigin.CENTER,
+        heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
+        disableDepthTestDistance: Number.POSITIVE_INFINITY,
       },
     })
     this._drawnEntities.push(point)
