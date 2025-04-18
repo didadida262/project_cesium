@@ -1,16 +1,19 @@
 export const BTNMap = [
   {
-    text: '跳转至目标地点',
-    key: 'jump',
+    text: '打点模式',
+    key: 'drawFlag',
   },
-
-  {
-    text: '标注模式',
-    key: 'mark',
-  },
+  //   {
+  //     text: "标注模式",
+  //     key: "mark",
+  //   },
   {
     text: '动效演示',
     key: 'situation',
+  },
+  {
+    text: '跳转至目标地点',
+    key: 'jump',
   },
 ]
 export const options = [
@@ -85,5 +88,16 @@ export const MockPointData = [
     lon: 120.46221982225876,
     lat: 23.67681529612735,
     height: 49.98082774137771,
+  },
+]
+
+export const MockredTableData = [
+  {
+    name: '红旗',
+    icon: '/images/icon/flagRed.svg',
+  },
+  {
+    name: '绿旗',
+    icon: '/images/icon/flagGreen.svg',
   },
 ]

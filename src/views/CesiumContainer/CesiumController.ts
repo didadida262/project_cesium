@@ -149,6 +149,13 @@ export class CesiumController {
         break
     }
   }
+  static markFlag(flag: string) {
+    this.drawTool && this.drawTool._removeAllEvent()
+    this.drawTool = new IconTool(this.viewer, flag)
+    this.drawTool.activate(flag, (data: any) => {
+      console.log('data')
+    })
+  }
   static async showSituation() {
     await this.setupModelAnimation()
   }

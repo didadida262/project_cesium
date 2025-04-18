@@ -2,40 +2,53 @@
   <div class="w-full h-full relative text-[white]">
     <div
       :class="[
-        'operation w-[calc(50%)]  absolute top-[10px] left-[20px] z-10',
-        'flex justify-start items-center gap-x-[20px]',
+        'operation min-w-[calc(20%)]  absolute top-[10px] left-[20px] z-10 ',
       ]"
     >
       <div
-        v-for="item in BTNMap"
-        :key="item.key"
-        class="flex justify-start items-center gap-x-[10px]"
-        @click="handleClickBTN(item)"
+        :class="[
+          'header w-full h-[80px] ',
+          'flex justify-start items-center gap-x-[20px] ',
+        ]"
       >
-        <Button
-          :text="item.text"
-          :curren-model="currenModel"
-        />
-        <Select
-          v-if="item.key === BTNMap[1].key && currenModel === BTNMap[1].text"
-          :options="options"
-          :on-click="handleSelectMark"
-        />
+        <div
+          v-for="item in BTNMap"
+          :key="item.key"
+          class="flex justify-start items-center gap-x-[10px]"
+          @click="handleClickBTN(item)"
+        >
+          <Button
+            :data="item"
+            :curren-model="currenModel"
+          />
+          <Select
+            v-if="item.key === BTNMap[1].key && currenModel === 'mark'"
+            :options="options"
+            :on-click="handleSelectMark"
+          />
 
-        <Button
-          v-if="item.key === BTNMap[1].key && currenModel === BTNMap[1].text"
-          text="清除"
-          classname="!h-[36px] !w-[100px]"
-          :on-click="handleClear"
-        />
-        <Button
-          v-if="item.key === BTNMap[1].key && currenModel === BTNMap[1].text"
-          text="提交数据"
-          classname="!h-[36px] !w-[100px]"
-          :on-click="exportData"
+          <Button
+            v-if="item.key === BTNMap[1].key && currenModel === 'mark'"
+            :data="{ text: '清除' }"
+            classname="!h-[36px] !w-[100px]"
+            :on-click="handleClear"
+          />
+          <Button
+            v-if="item.key === BTNMap[1].key && currenModel === 'mark'"
+            :data="{ text: '提交数据' }"
+            classname="!h-[36px] !w-[100px]"
+            :on-click="exportData"
+          />
+        </div>
+      </div>
+      <div :class="['operation w-full h-[400px] markBroderR']">
+        <DrawFlagContainer
+          v-if="currenModel === 'drawFlag'"
+          :on-click="handleSelectFlag"
         />
       </div>
     </div>
+
     <div
       id="cesiumContainer"
       class="w-full h-full"
@@ -51,8 +64,14 @@ import Button from '../../components/ButtonComponent.vue'
 import Select from '../../components/SelectComponent.vue'
 import { CesiumController } from './CesiumController'
 import { BTNMap, options, MockPointData } from './const'
+import DrawFlagContainer from './components/DrawFlagContainer.vue'
 
 const currenModel = ref('')
+
+const handleSelectFlag = (item: any) => {
+  console.log('handleSelectFlag>>>', item)
+  CesiumController.markFlag(item.icon)
+}
 
 const exportData = () => {
   const res = CesiumController.exportData()
@@ -66,7 +85,12 @@ const handleSelectMark = (item: any) => {
   CesiumController.mark(item.key)
 }
 const handleClickBTN = (btn: any) => {
-  currenModel.value = btn.text
+  if (currenModel.value === btn.key) {
+    currenModel.value = ''
+    return
+  }
+  currenModel.value = btn.key
+  console.log('currenModel.value>>>', currenModel.value)
   switch (btn.key) {
     case 'jump':
       CesiumController.flyToTaiwan()
