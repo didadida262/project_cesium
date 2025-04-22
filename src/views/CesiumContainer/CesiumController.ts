@@ -70,6 +70,24 @@ export class CesiumController {
       },
       duration: 2, // 飞行时间(秒)
     })
+    // 可选：添加标记
+    this.viewer.entities.add({
+      name: 'Taiwan',
+      position: taiwanLabelPosition,
+      point: {
+        pixelSize: 10,
+        color: Cesium.Color.RED,
+        outlineColor: Cesium.Color.WHITE,
+        outlineWidth: 2,
+      },
+      label: {
+        text: '台湾',
+        style: Cesium.LabelStyle.FILL_AND_OUTLINE,
+        outlineWidth: 2,
+        verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
+        pixelOffset: new Cesium.Cartesian2(0, -10),
+      },
+    })
   }
   static clearAllMark() {
     this.drawTool && this.drawTool.clear()
