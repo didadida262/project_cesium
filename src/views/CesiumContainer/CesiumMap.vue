@@ -73,6 +73,8 @@ const handleClickBTN = (btn: any) => {
       break
     case 'situation':
       CesiumController.showSituation()
+      CesiumController.flyToTaiwan()
+
       break
     default:
       break

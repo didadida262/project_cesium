@@ -70,25 +70,6 @@ export class CesiumController {
       },
       duration: 2, // 飞行时间(秒)
     })
-
-    // 可选：添加标记
-    this.viewer.entities.add({
-      name: 'Taiwan',
-      position: taiwanLabelPosition,
-      point: {
-        pixelSize: 10,
-        color: Cesium.Color.RED,
-        outlineColor: Cesium.Color.WHITE,
-        outlineWidth: 2,
-      },
-      label: {
-        text: '台湾',
-        style: Cesium.LabelStyle.FILL_AND_OUTLINE,
-        outlineWidth: 2,
-        verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
-        pixelOffset: new Cesium.Cartesian2(0, -10),
-      },
-    })
   }
   static clearAllMark() {
     this.drawTool && this.drawTool.clear()
@@ -210,14 +191,14 @@ export class CesiumController {
     this.viewer.trackedEntity = modelEntity
 
     // 5. 添加路线可视化
-    this.viewer.entities.add({
-      polyline: {
-        positions: [this.tainanPosition, this.taipeiPosition],
-        width: 2,
-        material: Cesium.Color.RED.withAlpha(0.5),
-        arcType: Cesium.ArcType.GEODESIC,
-      },
-    })
+    // this.viewer.entities.add({
+    //   polyline: {
+    //     positions: [this.tainanPosition, this.taipeiPosition],
+    //     width: 2,
+    //     material: Cesium.Color.RED.withAlpha(0.5),
+    //     arcType: Cesium.ArcType.GEODESIC,
+    //   },
+    // });
   }
   static drawPoints(points: any) {
     points.forEach((point: any) => {
