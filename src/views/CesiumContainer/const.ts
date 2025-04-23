@@ -45,6 +45,10 @@ export const BTNMap = [
     text: '动效演示',
     key: 'situation',
   },
+  {
+    text: '图标绘制',
+    key: 'drawFlag',
+  },
 ]
 export const options = [
   {
@@ -118,5 +122,16 @@ export const MockPointData = [
     lon: 120.46221982225876,
     lat: 23.67681529612735,
     height: 49.98082774137771,
+  },
+]
+
+export const MockredTableData = [
+  {
+    name: '红旗',
+    icon: '/images/icon/flagRed.svg',
+  },
+  {
+    name: '绿旗',
+    icon: '/images/icon/flagGreen.svg',
   },
 ]
