@@ -153,12 +153,13 @@ export class CesiumController {
   }
   static async setupModelAnimation() {
     if (!this.viewer) return
+
     // 1. 加载模型
     const modelEntity = this.viewer.entities.add({
       name: '飞机',
       position: this.tainanPosition,
       model: {
-        uri: '/models/Cesium_Air.glb', // 替换为你的模型路径
+        uri: '/models/Cesium_Air.glb',
         minimumPixelSize: 64,
         maximumScale: 200000,
       },
@@ -177,25 +178,26 @@ export class CesiumController {
     modelEntity.orientation = new Cesium.VelocityOrientationProperty(
       modelEntity.position as Cesium.SampledPositionProperty,
     )
+
     // 2. 创建位置属性随时间变化的函数
     const startTime = Cesium.JulianDate.fromDate(new Date())
     const stopTime = Cesium.JulianDate.addSeconds(
       startTime,
-      10, // 30秒完成移动
+      10, // 10秒完成移动
       new Cesium.JulianDate(),
     )
 
-    // 添加到时钟中
+    // 设置时钟
     this.viewer.clock.startTime = startTime.clone()
     this.viewer.clock.stopTime = stopTime.clone()
     this.viewer.clock.currentTime = startTime.clone()
-    this.viewer.clock.clockRange = Cesium.ClockRange.LOOP_STOP // 播放一次后停止
-    this.viewer.clock.multiplier = 1 // 实时速度
+    // this.viewer.clock.clockRange = Cesium.ClockRange.CLAMPED; // 改为CLAMPED确保只播放一次
+    this.viewer.clock.clockRange = Cesium.ClockRange.LOOP_STOP // 无限循环
+
+    this.viewer.clock.multiplier = 1
 
     // 3. 创建位置变化
     modelEntity.position = new Cesium.SampledPositionProperty();
-
-    // 添加开始和结束位置
     (modelEntity.position as Cesium.SampledPositionProperty).addSample(
       startTime,
       this.tainanPosition,
@@ -208,15 +210,16 @@ export class CesiumController {
     // 4. 设置相机跟随
     this.viewer.trackedEntity = modelEntity
 
-    // 5. 添加路线可视化
-    // this.viewer.entities.add({
-    //   polyline: {
-    //     positions: [this.tainanPosition, this.taipeiPosition],
-    //     width: 2,
-    //     material: Cesium.Color.RED.withAlpha(0.5),
-    //     arcType: Cesium.ArcType.GEODESIC,
-    //   },
-    // });
+    // 5. 添加动画结束监听器
+    this.viewer.clock.onTick.addEventListener(() => {
+      const currentTime = this.viewer.clock.currentTime
+      if (Cesium.JulianDate.compare(currentTime, stopTime) >= 0) {
+        // 动画结束时停止跟踪
+        this.viewer.trackedEntity = undefined
+        // 可选：移除模型
+        this.viewer.entities.remove(modelEntity)
+      }
+    })
   }
   static drawPoints(points: any) {
     points.forEach((point: any) => {
