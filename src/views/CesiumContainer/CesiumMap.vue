@@ -35,6 +35,12 @@
           :on-click="exportData"
         />
       </div>
+      <div :class="['operation w-full h-[400px] markBroderR']">
+        <DrawFlagContainer
+          v-if="currenModel === 'drawFlag'"
+          :on-click="handleSelectFlag"
+        />
+      </div>
     </div>
     <div
       id="cesiumContainer"
@@ -51,8 +57,13 @@ import Button from '../../components/ButtonComponent.vue'
 import Select from '../../components/SelectComponent.vue'
 import { CesiumController } from './CesiumController'
 import { BTNMap, options, MockPointData } from './const'
+import DrawFlagContainer from './components/DrawFlagContainer.vue'
 
 const currenModel = ref('')
+
+const handleSelectFlag = (data: any) => {
+  console.log('data>>>>', data)
+}
 
 const exportData = () => {
   const res = CesiumController.exportData()
