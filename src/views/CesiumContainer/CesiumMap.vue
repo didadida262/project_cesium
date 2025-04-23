@@ -66,8 +66,9 @@ import DrawFlagContainer from './components/DrawFlagContainer.vue'
 
 const currenModel = ref('')
 
-const handleSelectFlag = (data: any) => {
-  console.log('data>>>>', data)
+const handleSelectFlag = (item: any) => {
+  console.log('item>>>>', item)
+  CesiumController.mark('PointIcon', item)
 }
 
 const exportData = () => {

@@ -55,10 +55,7 @@ export const options = [
     label: '绘制点',
     key: 'Point',
   },
-  {
-    label: '绘制图标',
-    key: 'PointIcon',
-  },
+
   {
     label: '绘制线段',
     key: 'Line',

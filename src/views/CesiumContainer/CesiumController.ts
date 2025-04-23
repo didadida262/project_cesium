@@ -99,7 +99,7 @@ export class CesiumController {
   static handleAttack(type: string) {
     // Arrow.draw(type);
   }
-  static mark(type: string) {
+  static mark(type: string, data?: any) {
     this.drawTool && this.drawTool._removeAllEvent()
     switch (type) {
       case 'Point':
@@ -109,7 +109,7 @@ export class CesiumController {
         })
         break
       case 'PointIcon':
-        this.drawTool = new IconTool(this.viewer)
+        this.drawTool = new IconTool(this.viewer, data.icon)
         this.drawTool.activate(type, (data: any) => {
           console.log('data')
         })

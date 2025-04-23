@@ -12,16 +12,18 @@ export default class DrawTool {
   private viewer: Cesium.Viewer
   private _drawHandler: Cesium.ScreenSpaceEventHandler | null
   private _drawnEntities: Cesium.Entity[]
+  private iconpath: string
 
   /**
    * 构造函数
    * @param viewer Cesium 查看器实例
    */
-  constructor(viewer: Cesium.Viewer) {
+  constructor(viewer: Cesium.Viewer, icon: string) {
     this.name = 'IconTool'
     this.viewer = viewer
     this._drawHandler = null // 事件处理器
     this._drawnEntities = [] // 存储绘制的实体
+    this.iconpath = icon
   }
 
   /**
@@ -78,7 +80,7 @@ export default class DrawTool {
       name: this.name,
       position: Cesium.Cartesian3.fromDegrees(p[0], p[1], p[2]),
       billboard: {
-        image: '/images/icon/flagRed.svg', // 替换成你自己的图标
+        image: this.iconpath, // 替换成你自己的图标
         scale: 1.2,
         // color: Cesium.Color.GREEN, // 设置为红色
 
