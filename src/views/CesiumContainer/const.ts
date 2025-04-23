@@ -1,3 +1,36 @@
+import * as Cesium from 'cesium'
+
+const tainanPosition = Cesium.Cartesian3.fromDegrees(120.213, 22.997) // 台南
+const taipeiPosition = Cesium.Cartesian3.fromDegrees(121.565, 25.033) // 台北
+const putianPosition = Cesium.Cartesian3.fromDegrees(119.138, 25.292) // 莆田
+const shantouPosition = Cesium.Cartesian3.fromDegrees(116.686, 23.358) // 汕头
+const taizhongPosition = Cesium.Cartesian3.fromDegrees(120.648, 24.163) // 台中
+const xiamenPosition = Cesium.Cartesian3.fromDegrees(118.116, 24.468) // 厦门
+const nanjingPosition = Cesium.Cartesian3.fromDegrees(
+  118.78211699999997,
+  32.03577000000001,
+) // 南京
+export const ways = [
+  {
+    name: '1',
+    startPosition: putianPosition,
+    endPosition: taipeiPosition,
+    model: '/models/Cesium_Air.glb',
+  },
+  {
+    name: '2',
+    startPosition: xiamenPosition,
+    endPosition: taizhongPosition,
+    model: '/models/Cesium_Air.glb',
+  },
+  {
+    name: 'follow',
+    startPosition: shantouPosition,
+    endPosition: tainanPosition,
+    model: '/models/Cesium_Air.glb',
+  },
+]
+
 export const BTNMap = [
   {
     text: '跳转至目标地点',

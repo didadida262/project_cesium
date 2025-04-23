@@ -3,6 +3,7 @@ import PointTool from './tools/PointTool'
 import Polyline from './tools/Polyline'
 import LineTool from './tools/LineTool'
 import IconTool from './tools/IconTool'
+import { ways } from './const'
 
 import StragitArrowTool from './tools/StragitArrowTool'
 // import Arrow from './tools/drawArrow/drawPlot'
@@ -10,7 +11,6 @@ export class CesiumController {
   static viewer: Cesium.Viewer
   static drawTool: any
 
-  // 台南和台北的坐标
   static tainanPosition = Cesium.Cartesian3.fromDegrees(120.213, 22.997) // 台南
   static taipeiPosition = Cesium.Cartesian3.fromDegrees(121.565, 25.033) // 台北
   static testPosition = Cesium.Cartesian3.fromDegrees(119.138, 25.292) // 莆田
@@ -149,18 +149,20 @@ export class CesiumController {
         break
     }
   }
-  static async showSituation() {
-    await this.setupModelAnimation()
+  static async patchAnimation() {
+    for (let i = 0; i < ways.length; i++) {
+      const item = ways[i]
+      await this.animateGLB(item)
+    }
   }
-  static async setupModelAnimation() {
+  static async animateGLB(item: any) {
     if (!this.viewer) return
-
     // 1. 加载模型
     const modelEntity = this.viewer.entities.add({
       name: '飞机',
-      position: this.testPosition,
+      position: item.startPosition,
       model: {
-        uri: '/models/Cesium_Air.glb',
+        uri: item.model,
         minimumPixelSize: 64,
         maximumScale: 200000,
       },
@@ -192,8 +194,8 @@ export class CesiumController {
     this.viewer.clock.startTime = startTime.clone()
     this.viewer.clock.stopTime = stopTime.clone()
     this.viewer.clock.currentTime = startTime.clone()
-    // this.viewer.clock.clockRange = Cesium.ClockRange.CLAMPED; // 改为CLAMPED确保只播放一次
-    this.viewer.clock.clockRange = Cesium.ClockRange.LOOP_STOP // 无限循环
+    this.viewer.clock.clockRange = Cesium.ClockRange.CLAMPED // 改为CLAMPED确保只播放一次
+    // this.viewer.clock.clockRange = Cesium.ClockRange.LOOP_STOP; // 无限循环
 
     this.viewer.clock.multiplier = 1
 
@@ -201,15 +203,16 @@ export class CesiumController {
     modelEntity.position = new Cesium.SampledPositionProperty();
     (modelEntity.position as Cesium.SampledPositionProperty).addSample(
       startTime,
-      this.testPosition,
+      item.startPosition,
     );
     (modelEntity.position as Cesium.SampledPositionProperty).addSample(
       stopTime,
-      this.taipeiPosition,
+      item.endPosition,
     )
 
     // 4. 设置相机跟随
-    this.viewer.trackedEntity = modelEntity
+    // if (item.name === "follow") {
+    //   this.viewer.trackedEntity = modelEntity;
 
     // 5. 添加动画结束监听器
     this.viewer.clock.onTick.addEventListener(() => {
@@ -221,7 +224,12 @@ export class CesiumController {
         this.viewer.entities.remove(modelEntity)
       }
     })
+    // }
   }
+  static async showSituation() {
+    await this.patchAnimation()
+  }
+
   static drawPoints(points: any) {
     points.forEach((point: any) => {
       // 添加点实体
