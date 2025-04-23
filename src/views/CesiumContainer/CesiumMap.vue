@@ -63,6 +63,7 @@ const handleClear = () => {
 }
 const handleSelectMark = (item: any) => {
   console.log('handleSelectMark>>>', item)
+  console.log('handleSelectMark>>>2', item.key)
   CesiumController.mark(item.key)
 }
 const handleClickBTN = (btn: any) => {

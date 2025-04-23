@@ -26,10 +26,10 @@ export const options = [
     label: '绘制线段',
     key: 'Line',
   },
-  {
-    label: '直线箭头',
-    key: 'StraightArrow',
-  },
+  //   {
+  //     label: '直线箭头',
+  //     key: 'StraightArrow',
+  //   },
   //   {
   //     label: "直线箭头",
   //     key: "StraightArrow",

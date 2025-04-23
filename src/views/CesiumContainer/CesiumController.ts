@@ -5,7 +5,7 @@ import LineTool from './tools/LineTool'
 import IconTool from './tools/IconTool'
 
 import StragitArrowTool from './tools/StragitArrowTool'
-import Arrow from './tools/drawArrow/drawPlot'
+// import Arrow from './tools/drawArrow/drawPlot'
 export class CesiumController {
   static viewer: Cesium.Viewer
   static drawTool: any
@@ -40,7 +40,7 @@ export class CesiumController {
     // 显示帧率
     this.viewer.scene.debugShowFramesPerSecond = true;
     (window as any).viewer = this.viewer
-    Arrow.init(this.viewer)
+    // Arrow.init(this.viewer);
   }
   static exportData() {
     const res = this.drawTool && this.drawTool.exportData()
@@ -96,7 +96,7 @@ export class CesiumController {
     this.drawTool && this.drawTool.clear()
   }
   static handleAttack(type: string) {
-    Arrow.draw(type)
+    // Arrow.draw(type);
   }
   static mark(type: string) {
     this.drawTool && this.drawTool._removeAllEvent()
