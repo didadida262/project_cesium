@@ -13,6 +13,7 @@ export class CesiumController {
   // 台南和台北的坐标
   static tainanPosition = Cesium.Cartesian3.fromDegrees(120.213, 22.997) // 台南
   static taipeiPosition = Cesium.Cartesian3.fromDegrees(121.565, 25.033) // 台北
+  static testPosition = Cesium.Cartesian3.fromDegrees(119.138, 25.292) // 莆田
   static nanjingPosition = Cesium.Cartesian3.fromDegrees(
     118.78211699999997,
     32.03577000000001,
@@ -157,7 +158,7 @@ export class CesiumController {
     // 1. 加载模型
     const modelEntity = this.viewer.entities.add({
       name: '飞机',
-      position: this.tainanPosition,
+      position: this.testPosition,
       model: {
         uri: '/models/Cesium_Air.glb',
         minimumPixelSize: 64,
@@ -200,7 +201,7 @@ export class CesiumController {
     modelEntity.position = new Cesium.SampledPositionProperty();
     (modelEntity.position as Cesium.SampledPositionProperty).addSample(
       startTime,
-      this.tainanPosition,
+      this.testPosition,
     );
     (modelEntity.position as Cesium.SampledPositionProperty).addSample(
       stopTime,
