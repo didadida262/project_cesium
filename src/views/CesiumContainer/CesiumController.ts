@@ -116,8 +116,6 @@ export class CesiumController {
         })
         break
       case 'StraightArrow':
-        // =方案一
-        // this.handleAttack('straightArrow')
         // =方案二
         this.drawTool = new StragitArrowTool(this.viewer)
         this.drawTool.activate(type, (data: any) => {

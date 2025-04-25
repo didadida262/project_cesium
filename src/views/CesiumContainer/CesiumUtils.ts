@@ -43,7 +43,6 @@ export const getCatesian3FromPX = (point: any, viewer: Cesium.Viewer) => {
       (picks[i] && picks[i].primitive) ||
       picks[i] instanceof Cesium.Cesium3DTileFeature
     ) {
-      //模型上拾取
       isOn3dtiles = true
     }
   }
