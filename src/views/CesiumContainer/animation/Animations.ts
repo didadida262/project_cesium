@@ -44,8 +44,8 @@ export const moveAToBGLB = async (viewer: Cesium.Viewer, item: IMoveItem) => {
   viewer.clock.startTime = startTime.clone()
   viewer.clock.stopTime = stopTime.clone()
   viewer.clock.currentTime = startTime.clone()
-  //   viewer.clock.clockRange = Cesium.ClockRange.CLAMPED;
-  viewer.clock.clockRange = Cesium.ClockRange.LOOP_STOP // 无限循环
+  viewer.clock.clockRange = Cesium.ClockRange.CLAMPED
+  //   viewer.clock.clockRange = Cesium.ClockRange.LOOP_STOP; // 无限循环
 
   // 7. 设置路径关键点
   modelEntity.position = new Cesium.SampledPositionProperty();
