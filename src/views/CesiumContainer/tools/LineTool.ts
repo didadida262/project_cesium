@@ -201,7 +201,9 @@ export default class DrawTool {
         depthFailMaterial: new Cesium.PolylineDashMaterialProperty({
           color: Cesium.Color.YELLOW,
         }),
-      },
+        heightReference: Cesium.HeightReference.CLAMP_TO_GROUND, // 或 RELATIVE_TO_GROUND
+        disableDepthTestDistance: Number.POSITIVE_INFINITY, // 关键设置
+      } as any,
     })
 
     this._tempPositions = []

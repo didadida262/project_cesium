@@ -19,6 +19,8 @@ export const drawPoint = (
       color: Cesium.Color.RED,
       outlineColor: Cesium.Color.WHITE,
       outlineWidth: 2,
+      disableDepthTestDistance: Number.POSITIVE_INFINITY, // 关键设置
+      heightReference: Cesium.HeightReference.NONE,
     },
     label: {
       text: label,
@@ -26,6 +28,8 @@ export const drawPoint = (
       outlineWidth: 2,
       verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
       pixelOffset: new Cesium.Cartesian2(0, -10),
+      disableDepthTestDistance: Number.POSITIVE_INFINITY, // 关键设置
+      heightReference: Cesium.HeightReference.NONE,
     },
   })
 }

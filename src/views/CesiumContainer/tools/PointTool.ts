@@ -82,7 +82,8 @@ export default class DrawTool {
         pixelSize: 10,
         outlineColor: Cesium.Color.YELLOW,
         outlineWidth: 2,
-        // heightReference: Cesium.HeightReference.CLAMP_TO_GROUND
+        disableDepthTestDistance: Number.POSITIVE_INFINITY, // 关键设置
+        heightReference: Cesium.HeightReference.NONE,
       },
     })
     this._drawnEntities.push(point)

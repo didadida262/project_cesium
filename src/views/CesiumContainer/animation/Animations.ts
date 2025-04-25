@@ -24,7 +24,9 @@ export const moveAToBGLB = async (viewer: Cesium.Viewer, item: IMoveItem) => {
       uri: item.model,
       minimumPixelSize: 64,
       maximumScale: 200000,
-    },
+      heightReference: Cesium.HeightReference.CLAMP_TO_GROUND, // 或 RELATIVE_TO_GROUND
+      disableDepthTestDistance: Number.POSITIVE_INFINITY, // 关键设置
+    } as any,
   })
 
   // 4. 设置模型方向（跟随路径）
