@@ -3,21 +3,20 @@ import PointTool from './tools/PointTool'
 import Polyline from './tools/Polyline'
 import LineTool from './tools/LineTool'
 import IconTool from './tools/IconTool'
-import { ways } from './const'
+import { handleAnimation } from './animation/Animations'
+import { drawPoint } from './CesiumUtils'
+import {
+  taipeiPosition,
+  taizhongPosition,
+  gaoxiongPosition,
+  tainanPosition,
+} from './const'
 
 import StragitArrowTool from './tools/StragitArrowTool'
 // import Arrow from './tools/drawArrow/drawPlot'
 export class CesiumController {
   static viewer: Cesium.Viewer
   static drawTool: any
-
-  static tainanPosition = Cesium.Cartesian3.fromDegrees(120.213, 22.997) // 台南
-  static taipeiPosition = Cesium.Cartesian3.fromDegrees(121.565, 25.033) // 台北
-  static testPosition = Cesium.Cartesian3.fromDegrees(119.138, 25.292) // 莆田
-  static nanjingPosition = Cesium.Cartesian3.fromDegrees(
-    118.78211699999997,
-    32.03577000000001,
-  ) // 南京
 
   static init_world(containerId: string) {
     Cesium.Ion.defaultAccessToken =
@@ -72,23 +71,10 @@ export class CesiumController {
       duration: 2, // 飞行时间(秒)
     })
     // 可选：添加标记
-    this.viewer.entities.add({
-      name: 'Taiwan',
-      position: taiwanLabelPosition,
-      point: {
-        pixelSize: 10,
-        color: Cesium.Color.RED,
-        outlineColor: Cesium.Color.WHITE,
-        outlineWidth: 2,
-      },
-      label: {
-        text: '台湾',
-        style: Cesium.LabelStyle.FILL_AND_OUTLINE,
-        outlineWidth: 2,
-        verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
-        pixelOffset: new Cesium.Cartesian2(0, -10),
-      },
-    })
+    drawPoint(this.viewer, '台北', taipeiPosition)
+    drawPoint(this.viewer, '台中', taizhongPosition)
+    drawPoint(this.viewer, '高雄', gaoxiongPosition)
+    drawPoint(this.viewer, '台南', tainanPosition)
   }
   static clearAllMark() {
     this.drawTool && this.drawTool.clear()
@@ -149,85 +135,9 @@ export class CesiumController {
         break
     }
   }
-  static async patchAnimation() {
-    for (let i = 0; i < ways.length; i++) {
-      const item = ways[i]
-      await this.animateGLB(item)
-    }
-  }
-  static async animateGLB(item: any) {
-    if (!this.viewer) return
-    // 1. 加载模型
-    const modelEntity = this.viewer.entities.add({
-      name: '飞机',
-      position: item.startPosition,
-      model: {
-        uri: item.model,
-        minimumPixelSize: 64,
-        maximumScale: 200000,
-      },
-      path: {
-        leadTime: 0,
-        trailTime: 60,
-        width: 10,
-        resolution: 1,
-        material: new Cesium.PolylineGlowMaterialProperty({
-          glowPower: 0.2,
-          color: Cesium.Color.YELLOW,
-        }),
-      },
-    })
 
-    modelEntity.orientation = new Cesium.VelocityOrientationProperty(
-      modelEntity.position as Cesium.SampledPositionProperty,
-    )
-
-    // 2. 创建位置属性随时间变化的函数
-    const startTime = Cesium.JulianDate.fromDate(new Date())
-    const stopTime = Cesium.JulianDate.addSeconds(
-      startTime,
-      10, // 10秒完成移动
-      new Cesium.JulianDate(),
-    )
-
-    // 设置时钟
-    this.viewer.clock.startTime = startTime.clone()
-    this.viewer.clock.stopTime = stopTime.clone()
-    this.viewer.clock.currentTime = startTime.clone()
-    this.viewer.clock.clockRange = Cesium.ClockRange.CLAMPED // 改为CLAMPED确保只播放一次
-    // this.viewer.clock.clockRange = Cesium.ClockRange.LOOP_STOP; // 无限循环
-
-    this.viewer.clock.multiplier = 1
-
-    // 3. 创建位置变化
-    modelEntity.position = new Cesium.SampledPositionProperty();
-    (modelEntity.position as Cesium.SampledPositionProperty).addSample(
-      startTime,
-      item.startPosition,
-    );
-    (modelEntity.position as Cesium.SampledPositionProperty).addSample(
-      stopTime,
-      item.endPosition,
-    )
-
-    // 4. 设置相机跟随
-    // if (item.name === "follow") {
-    //   this.viewer.trackedEntity = modelEntity;
-
-    // 5. 添加动画结束监听器
-    this.viewer.clock.onTick.addEventListener(() => {
-      const currentTime = this.viewer.clock.currentTime
-      if (Cesium.JulianDate.compare(currentTime, stopTime) >= 0) {
-        // 动画结束时停止跟踪
-        this.viewer.trackedEntity = undefined
-        // 可选：移除模型
-        this.viewer.entities.remove(modelEntity)
-      }
-    })
-    // }
-  }
-  static async showSituation() {
-    await this.patchAnimation()
+  static async showSituation(item: any) {
+    await handleAnimation(this.viewer, item)
   }
 
   static drawPoints(points: any) {

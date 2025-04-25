@@ -1,10 +1,12 @@
 import * as Cesium from 'cesium'
 
-const tainanPosition = Cesium.Cartesian3.fromDegrees(120.213, 22.997) // 台南
-const taipeiPosition = Cesium.Cartesian3.fromDegrees(121.565, 25.033) // 台北
+export const tainanPosition = Cesium.Cartesian3.fromDegrees(120.213, 22.997) // 台南
+export const taipeiPosition = Cesium.Cartesian3.fromDegrees(121.565, 25.033) // 台北
+export const taizhongPosition = Cesium.Cartesian3.fromDegrees(120.648, 24.163) // 台中
+export const gaoxiongPosition = Cesium.Cartesian3.fromDegrees(120.307, 22.624) // 高雄
+
 const putianPosition = Cesium.Cartesian3.fromDegrees(119.138, 25.292) // 莆田
 const shantouPosition = Cesium.Cartesian3.fromDegrees(116.686, 23.358) // 汕头
-const taizhongPosition = Cesium.Cartesian3.fromDegrees(120.648, 24.163) // 台中
 const xiamenPosition = Cesium.Cartesian3.fromDegrees(118.116, 24.468) // 厦门
 const nanjingPosition = Cesium.Cartesian3.fromDegrees(
   118.78211699999997,
@@ -130,5 +132,38 @@ export const MockredTableData = [
   {
     name: '绿旗',
     icon: '/images/icon/flagGreen.svg',
+  },
+]
+
+export const MockScriptTableData = [
+  {
+    name: '攻T1',
+    key: 1,
+    animationData: {
+      name: 'air',
+      startPosition: putianPosition,
+      endPosition: taipeiPosition,
+      model: '/models/Cesium_Air.glb',
+    },
+  },
+  {
+    name: '攻T2',
+    key: 2,
+    animationData: {
+      name: 'air',
+      startPosition: xiamenPosition,
+      endPosition: taizhongPosition,
+      model: '/models/Cesium_Air.glb',
+    },
+  },
+  {
+    name: '攻T3',
+    key: 3,
+    animationData: {
+      name: 'air',
+      startPosition: shantouPosition,
+      endPosition: tainanPosition,
+      model: '/models/Cesium_Air.glb',
+    },
   },
 ]

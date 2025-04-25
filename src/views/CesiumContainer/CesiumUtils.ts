@@ -6,15 +6,26 @@ export const removePath = (viewer: Cesium.Viewer, path: any) => {
   path = null
 }
 
-export const showPoint = (viewer: Cesium.Viewer, point: any) => {
+export const drawPoint = (
+  viewer: Cesium.Viewer,
+  label: string,
+  position: any,
+) => {
   viewer.entities.add({
-    position: point,
+    name: label,
+    position: position,
     point: {
-      color: Cesium.Color.RED,
       pixelSize: 10,
-      outlineColor: Cesium.Color.YELLOW,
+      color: Cesium.Color.RED,
+      outlineColor: Cesium.Color.WHITE,
       outlineWidth: 2,
-      // heightReference:Cesium.HeightReference.CLAMP_TO_GROUND
+    },
+    label: {
+      text: label,
+      style: Cesium.LabelStyle.FILL_AND_OUTLINE,
+      outlineWidth: 2,
+      verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
+      pixelOffset: new Cesium.Cartesian2(0, -10),
     },
   })
 }

@@ -44,6 +44,10 @@
           v-if="currenModel === '图标绘制'"
           :on-click="handleSelectFlag"
         />
+        <DrawAnimationContainer
+          v-if="currenModel === '动效演示'"
+          :on-click="handleSelectAnimation"
+        />
       </div>
     </div>
 
@@ -63,12 +67,18 @@ import Select from '../../components/SelectComponent.vue'
 import { CesiumController } from './CesiumController'
 import { BTNMap, options, MockPointData } from './const'
 import DrawFlagContainer from './components/DrawFlagContainer.vue'
+import DrawAnimationContainer from './components/DrawAnimationContainer.vue'
 
 const currenModel = ref('')
 
 const handleSelectFlag = (item: any) => {
   console.log('item>>>>', item)
   CesiumController.mark('PointIcon', item)
+}
+const handleSelectAnimation = (item: any) => {
+  console.log('item>>>>', item)
+  //   CesiumController.flyToTaiwan();
+  CesiumController.showSituation(item)
 }
 
 const exportData = () => {
@@ -89,10 +99,10 @@ const handleClickBTN = (btn: any) => {
     case 'jump':
       CesiumController.flyToTaiwan()
       break
-    case 'situation':
-      CesiumController.showSituation()
-      CesiumController.flyToTaiwan()
-      break
+    // case "situation":
+    //   CesiumController.showSituation();
+    //   CesiumController.flyToTaiwan();
+    //   break;
     default:
       break
   }
