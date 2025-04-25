@@ -14,6 +14,7 @@ module.exports = {
     ecmaVersion: 2018,
   },
   rules: {
+    'vue/multi-word-component-names': 'off', // 关闭多单词组件名检查
     '@typescript-eslint/ban-types': [
       'error',
       {
