@@ -134,6 +134,17 @@ export const MockredTableData = [
     icon: '/images/icon/flagGreen.svg',
   },
 ]
+export const MockMarkTableData = [
+  {
+    name: '绘制点',
+    key: 'Point',
+  },
+
+  {
+    name: '绘制线段',
+    key: 'Line',
+  },
+]
 
 export const MockScriptTableData = [
   {

@@ -19,7 +19,7 @@
             :text="item.text"
             :curren-model="currenModel"
           />
-          <Select
+          <!-- <Select
             v-if="item.key === BTNMap[1].key && currenModel === BTNMap[1].text"
             :options="options"
             :on-click="handleSelectMark"
@@ -36,10 +36,14 @@
             text="提交数据"
             classname="!h-[36px] !w-[100px]"
             :on-click="exportData"
-          />
+          /> -->
         </div>
       </div>
       <div :class="['operation_content w-full h-[400px]']">
+        <MarkContainer
+          v-if="currenModel === '标注模式'"
+          :on-click="handleSelectMark"
+        />
         <DrawFlagContainer
           v-if="currenModel === '图标绘制'"
           :on-click="handleSelectFlag"
@@ -68,6 +72,7 @@ import { CesiumController } from './CesiumController'
 import { BTNMap, options, MockPointData } from './const'
 import DrawFlagContainer from './components/DrawFlagContainer.vue'
 import DrawAnimationContainer from './components/DrawAnimationContainer.vue'
+import MarkContainer from './components/MarkContainer.vue'
 
 const currenModel = ref('')
 
@@ -89,14 +94,11 @@ const handleClear = () => {
   CesiumController.clearAllMark()
 }
 const handleSelectMark = (item: any) => {
-  console.log('handleSelectMark>>>', item)
-  console.log('handleSelectMark>>>2', item.key)
   CesiumController.mark(item.key)
 }
 const handleClickBTN = (btn: any) => {
   currenModel.value = btn.text
   CesiumController.remove()
-
   switch (btn.key) {
     case 'jump':
       CesiumController.flyToTaiwan()
