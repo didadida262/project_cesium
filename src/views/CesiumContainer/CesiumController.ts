@@ -18,6 +18,9 @@ export class CesiumController {
   static viewer: Cesium.Viewer
   static drawTool: any
 
+  static remove() {
+    this.drawTool && this.drawTool._removeAllEvent()
+  }
   static init_world(containerId: string) {
     Cesium.Ion.defaultAccessToken =
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJhMTQ4ZmRhMS00MjY3LTRlZTgtOGU3Yi01OTY4NTEwN2NkYzciLCJpZCI6Mjk0MTEyLCJpYXQiOjE3NDQ2ODU2OTd9.yMNzVcVvq9NI2sXWePenGj5ZJbshJqiGqctlNlDWEDA'

@@ -95,6 +95,8 @@ const handleSelectMark = (item: any) => {
 }
 const handleClickBTN = (btn: any) => {
   currenModel.value = btn.text
+  CesiumController.remove()
+
   switch (btn.key) {
     case 'jump':
       CesiumController.flyToTaiwan()
