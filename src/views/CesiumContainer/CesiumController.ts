@@ -1,8 +1,10 @@
 import * as Cesium from 'cesium'
 import PointTool from './tools/PointTool'
-import Polyline from './tools/Polyline'
 import LineTool from './tools/LineTool'
 import IconTool from './tools/IconTool'
+import StragitArrowTool from './tools/StragitArrowTool'
+import Polyline from './tools/Polyline'
+
 import { handleAnimation } from './animation/Animations'
 import { drawPoint } from './CesiumUtils'
 import {
@@ -12,8 +14,6 @@ import {
   tainanPosition,
 } from './const'
 
-import StragitArrowTool from './tools/StragitArrowTool'
-// import Arrow from './tools/drawArrow/drawPlot'
 export class CesiumController {
   static viewer: Cesium.Viewer
   static drawTool: any
@@ -43,7 +43,6 @@ export class CesiumController {
     // 显示帧率
     this.viewer.scene.debugShowFramesPerSecond = true;
     (window as any).viewer = this.viewer
-    // Arrow.init(this.viewer);
   }
   static exportData() {
     const res = this.drawTool && this.drawTool.exportData()
@@ -86,7 +85,7 @@ export class CesiumController {
     this.drawTool && this.drawTool.clear()
   }
   static handleAttack(type: string) {
-    // Arrow.draw(type);
+    console.log('//.///')
   }
   static mark(type: string, data?: any) {
     this.drawTool && this.drawTool._removeAllEvent()
@@ -97,20 +96,14 @@ export class CesiumController {
           console.log('data')
         })
         break
-      case 'PointIcon':
-        this.drawTool = new IconTool(this.viewer, data.icon)
-        this.drawTool.activate(type, (data: any) => {
-          console.log('data')
-        })
-        break
-      case 'Polyline':
-        this.drawTool = new Polyline(this.viewer)
-        this.drawTool.activate(type, (data: any) => {
-          console.log('data')
-        })
-        break
       case 'Line':
         this.drawTool = new LineTool(this.viewer)
+        this.drawTool.activate(type, (data: any) => {
+          console.log('data')
+        })
+        break
+      case 'PointIcon':
+        this.drawTool = new IconTool(this.viewer, data.icon)
         this.drawTool.activate(type, (data: any) => {
           console.log('data')
         })
@@ -122,6 +115,13 @@ export class CesiumController {
           console.log('data')
         })
         break
+      //   case "Polyline":
+      //     this.drawTool = new Polyline(this.viewer);
+      //     this.drawTool.activate(type, (data: any) => {
+      //       console.log("data");
+      //     });
+      //     break;
+
       //   case "StraightArrow":
       //     // =方案一
       //     this.handleAttack("straightArrow");
