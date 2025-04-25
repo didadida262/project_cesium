@@ -81,7 +81,7 @@ export default class DrawTool {
       position: Cesium.Cartesian3.fromDegrees(p[0], p[1], p[2]),
       billboard: {
         image: this.iconpath, // 替换成你自己的图标
-        scale: 1.2,
+        scale: 0.5,
         // color: Cesium.Color.GREEN, // 设置为红色
 
         // 根据相机距离自动缩放（距离近大，距离远小）

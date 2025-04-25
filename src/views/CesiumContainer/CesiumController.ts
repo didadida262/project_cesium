@@ -33,7 +33,7 @@ export class CesiumController {
 
       timeline: false, // 是否显示时间线控件
       baseLayerPicker: false,
-      animation: true, // 可选：关闭动画控件
+      animation: false, // 可选：关闭动画控件
       shouldAnimate: true,
     });
 
