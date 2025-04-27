@@ -120,9 +120,6 @@ export default class DrawTool {
       const endPoints = cartesianToLatlng(that.viewer, p2)
 
       const arrow: Cesium.Cartesian3[] = []
-      console.warn('showArrowOnMap>>>>')
-      console.log('firstPoint>>>>', firstPoint)
-      console.log('endPoints>>>>', endPoints)
       const res = (xp as XpModule).algorithm.fineArrow(
         [firstPoint[0], firstPoint[1]],
         [endPoints[0], endPoints[1]],
