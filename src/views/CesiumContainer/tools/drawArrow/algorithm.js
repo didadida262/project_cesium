@@ -434,7 +434,7 @@ var fineArrowDefualParam = {
 
     const ress = d.filter((item) => item !== item)
     if (ress.length) {
-      console.log('ress>>>>1', ress)
+      console.log('触发error', ress)
       return []
     }
     return Cesium.Cartesian3.fromDegreesArray(d)
