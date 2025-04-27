@@ -120,10 +120,14 @@ export default class DrawTool {
       const endPoints = cartesianToLatlng(that.viewer, p2)
 
       const arrow: Cesium.Cartesian3[] = []
+      console.warn('showArrowOnMap>>>>')
+      console.log('firstPoint>>>>', firstPoint)
+      console.log('endPoints>>>>', endPoints)
       const res = (xp as XpModule).algorithm.fineArrow(
         [firstPoint[0], firstPoint[1]],
         [endPoints[0], endPoints[1]],
       )
+
       const index = JSON.stringify(res).indexOf('null')
       if (index !== -1) return new Cesium.PolygonHierarchy([])
       for (let i = 0; i < res.length; i++) {
@@ -191,6 +195,7 @@ export default class DrawTool {
 
   private _drawPath(e: Cesium.ScreenSpaceEventHandler.PositionedEvent): void {
     const cartesian = getCatesian3FromPX(e.position, this.viewer)
+    console.log('cartesian>>>>', cartesian)
     if (!cartesian) return
 
     if (this.positions.length === 0) {

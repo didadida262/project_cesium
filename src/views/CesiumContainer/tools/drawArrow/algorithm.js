@@ -385,7 +385,10 @@ var fineArrowDefualParam = {
     return newArray
   }),
   (xp.algorithm.fineArrow = function (tailPoint, headerPoint) {
+    console.log('fineArrow>>>>>>>1')
     if (tailPoint.length < 2 || headerPoint.length < 2) return
+    console.log('fineArrow>>>>>>>2')
+
     //画箭头的函数
     let tailWidthFactor = fineArrowDefualParam.tailWidthFactor
     let neckWidthFactor = fineArrowDefualParam.neckWidthFactor
@@ -429,6 +432,8 @@ var fineArrowDefualParam = {
       e[0],
       e[1],
     )
+    // 待处理
+    console.log('报错>>>>')
     return Cesium.Cartesian3.fromDegreesArray(d)
   })
 export { xp }

@@ -26,6 +26,10 @@ export const moveAToBGLB = async (viewer: Cesium.Viewer, item: IMoveItem) => {
       maximumScale: 200000,
       heightReference: Cesium.HeightReference.CLAMP_TO_GROUND, // 或 RELATIVE_TO_GROUND
       disableDepthTestDistance: Number.POSITIVE_INFINITY, // 关键设置
+      // 关键：绕 Z 轴顺时针旋转 90 度（弧度制：Math.PI/2）
+      modelMatrix: Cesium.Matrix4.fromRotationTranslation(
+        Cesium.Matrix3.fromRotationZ(-Math.PI / 2), // 负值表示顺时针
+      ),
     } as any,
   })
 

@@ -177,4 +177,14 @@ export const MockScriptTableData = [
       model: '/models/Cesium_Air.glb',
     },
   },
+  {
+    name: '攻T4',
+    key: 4,
+    animationData: {
+      name: 'air',
+      startPosition: taipeiPosition,
+      endPosition: tainanPosition,
+      model: '/models/Cesium_Air.glb',
+    },
+  },
 ]
