@@ -25,10 +25,7 @@ export default {
                 /\/images\//g,
                 '/cesium-vue3-vite/images/',
               )
-              chunk.code = chunk.code.replace(
-                /\/models\//g,
-                '/cesium-vue3-vite/models/',
-              )
+              chunk.code = chunk.code.replace(/\/models\//g, '/models/')
             }
           }
         },
