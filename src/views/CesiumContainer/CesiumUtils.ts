@@ -1,5 +1,48 @@
 import * as Cesium from 'cesium'
 
+// 获取相机坐标
+export const logCameraStateOnMouseEvents = (viewer: Cesium.Viewer) => {
+  if (!viewer) return
+
+  // 初始化事件处理器
+  const handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas)
+
+  // 1. 监听左键点击
+  handler.setInputAction(
+    (click: Cesium.ScreenSpaceEventHandler.PositionedEvent) => {
+      const camera = viewer.scene.camera
+      const position = camera.position
+      const heading = camera.heading
+      const pitch = camera.pitch
+      const roll = camera.roll
+
+      console.log('=== 鼠标点击时相机状态 ===')
+      console.log('位置 (destination):', position)
+      console.log('方向 (orientation):', {
+        heading: Cesium.Math.toDegrees(heading),
+        pitch: Cesium.Math.toDegrees(pitch),
+        roll: Cesium.Math.toDegrees(roll),
+      })
+    },
+    Cesium.ScreenSpaceEventType.LEFT_CLICK,
+  )
+
+  // 2. 监听鼠标移动（可选）
+  handler.setInputAction(
+    (movement: Cesium.ScreenSpaceEventHandler.MotionEvent) => {
+      const camera = viewer.scene.camera
+      console.log('鼠标移动时相机位置:', camera.position)
+    },
+    Cesium.ScreenSpaceEventType.MOUSE_MOVE,
+  )
+
+  // 3. 监听滚轮缩放（可选）
+  handler.setInputAction(() => {
+    const camera = viewer.scene.camera
+    console.log('滚轮缩放后相机高度:', camera.positionCartographic.height)
+  }, Cesium.ScreenSpaceEventType.WHEEL)
+}
+
 // 删除指定path
 export const removePath = (viewer: Cesium.Viewer, path: any) => {
   viewer.entities.remove(path)
