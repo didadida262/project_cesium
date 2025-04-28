@@ -1,5 +1,23 @@
 import * as Cesium from 'cesium'
 
+export interface LonLatType {
+  longitude: number;
+  latitude: number;
+  height: number;
+}
+
+export const getLonLat = (cartesian: Cesium.Cartesian3) => {
+  const position = Cesium.Cartographic.fromCartesian(cartesian)
+  const longitude = Cesium.Math.toDegrees(position.longitude)
+  const latitude = Cesium.Math.toDegrees(position.latitude)
+  const height = Cesium.Math.toDegrees(position.height)
+  return {
+    longitude,
+    latitude,
+    height,
+  }
+}
+
 // 获取相机坐标
 export const logCameraStateOnMouseEvents = (viewer: Cesium.Viewer) => {
   if (!viewer) return

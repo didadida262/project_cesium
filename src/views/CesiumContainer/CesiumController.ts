@@ -13,6 +13,11 @@ import {
   gaoxiongPosition,
   tainanPosition,
 } from './const'
+import {
+  logCameraStateOnMouseEvents,
+  getLonLat,
+  LonLatType,
+} from './CesiumUtils'
 
 export class CesiumController {
   static viewer: Cesium.Viewer
@@ -50,29 +55,23 @@ export class CesiumController {
   }
   static flyToTaiwan() {
     if (!this.viewer) return
-    // 台湾的经纬度坐标（台北）
-    const taiwanPosition = Cesium.Cartesian3.fromDegrees(
-      120.64405,
-      24.15814000000001,
-      500000,
-    )
-    const taiwanLabelPosition = Cesium.Cartesian3.fromDegrees(
-      121.5654,
-      25.033,
-      100000,
-    )
-
+    const destination: LonLatType = getLonLat(gaoxiongPosition)
     // 使用flyTo定位
     this.viewer.camera.flyTo({
-      destination: taiwanPosition,
+      destination: Cesium.Cartesian3.fromDegrees(
+        destination.longitude,
+        destination.latitude,
+        500000,
+      ),
       orientation: {
         heading: Cesium.Math.toRadians(0), // 朝向
-        pitch: Cesium.Math.toRadians(-90), // 俯仰角
+        pitch: Cesium.Math.toRadians(-70), // 俯仰角
         roll: 0.0,
       },
       duration: 2, // 飞行时间(秒)
     })
     // 可选：添加标记
+    console.log('taipeiPosition', taipeiPosition)
     drawPoint(this.viewer, '台北', taipeiPosition)
     drawPoint(this.viewer, '台中', taizhongPosition)
     drawPoint(this.viewer, '高雄', gaoxiongPosition)

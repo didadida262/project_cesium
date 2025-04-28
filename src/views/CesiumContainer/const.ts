@@ -1,5 +1,6 @@
 import * as Cesium from 'cesium'
 
+// 笛卡尔坐标转换成经纬度 Cesium.Cartographic.fromCartesian(cartesian);
 export const tainanPosition = Cesium.Cartesian3.fromDegrees(120.213, 22.997) // 台南
 export const taipeiPosition = Cesium.Cartesian3.fromDegrees(121.565, 25.033) // 台北
 export const taizhongPosition = Cesium.Cartesian3.fromDegrees(120.648, 24.163) // 台中
