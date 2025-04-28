@@ -157,6 +157,7 @@ export const MockScriptTableData = [
       model: '/models/Cesium_Air.glb',
     },
   },
+
   {
     name: '攻T2',
     key: 2,
@@ -164,27 +165,39 @@ export const MockScriptTableData = [
       name: 'air',
       startPosition: xiamenPosition,
       endPosition: taizhongPosition,
-      model: '/models/Cesium_Air.glb',
+      model: '/models/Cesium_Man.glb',
     },
   },
+
   {
     name: '攻T3',
-    key: 3,
+    key: 4,
     animationData: {
       name: 'air',
       startPosition: shantouPosition,
       endPosition: tainanPosition,
-      model: '/models/Cesium_Air.glb',
+      model: '/models/CesiumDrone.glb',
+    },
+  },
+
+  {
+    name: '攻T4',
+    key: 5,
+    animationData: {
+      name: 'air',
+      startPosition: shantouPosition,
+      endPosition: taizhongPosition,
+      model: '/models/CesiumBalloon.glb',
     },
   },
   {
     name: '攻T4',
-    key: 4,
+    key: 5,
     animationData: {
       name: 'air',
       startPosition: taipeiPosition,
       endPosition: tainanPosition,
-      model: '/models/Cesium_Air.glb',
+      model: '/models/CesiumBalloon.glb',
     },
   },
 ]
