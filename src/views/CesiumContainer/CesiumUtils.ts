@@ -6,6 +6,41 @@ export interface LonLatType {
   height: number;
 }
 
+export const getOrientation = (
+  position: Cesium.Cartesian3,
+  startPosition: Cesium.Cartesian3,
+  endPosition: Cesium.Cartesian3,
+) => {
+  // 1. 计算方向向量
+  const direction = Cesium.Cartesian3.subtract(
+    endPosition,
+    startPosition,
+    new Cesium.Cartesian3(),
+  )
+  Cesium.Cartesian3.normalize(direction, direction)
+
+  // 2. 计算heading角度
+  const eastNorthUp = Cesium.Transforms.eastNorthUpToFixedFrame(startPosition)
+  const localDirection = Cesium.Matrix4.multiplyByPointAsVector(
+    Cesium.Matrix4.inverseTransformation(eastNorthUp, new Cesium.Matrix4()),
+    direction,
+    new Cesium.Cartesian3(),
+  )
+  const heading = Math.atan2(localDirection.x, localDirection.y)
+
+  // 3. 生成Orientation
+  const hpr = new Cesium.HeadingPitchRoll(
+    heading + Cesium.Math.toRadians(-90),
+    0,
+    0,
+  )
+  const orientation = Cesium.Transforms.headingPitchRollQuaternion(
+    position,
+    hpr,
+  )
+  return new Cesium.ConstantProperty(orientation)
+}
+
 export const getLonLat = (cartesian: Cesium.Cartesian3) => {
   const position = Cesium.Cartographic.fromCartesian(cartesian)
   const longitude = Cesium.Math.toDegrees(position.longitude)

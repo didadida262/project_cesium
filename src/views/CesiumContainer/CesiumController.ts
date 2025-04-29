@@ -5,19 +5,18 @@ import IconTool from './tools/IconTool'
 import StragitArrowTool from './tools/StragitArrowTool'
 import Polyline from './tools/Polyline'
 
-import { handleAnimation } from './animation/Animations'
+import { handleAnimation, moveAToBGLBV2 } from './animation/Animations'
 import { drawPoint } from './CesiumUtils'
 import {
   taipeiPosition,
   taizhongPosition,
   gaoxiongPosition,
   tainanPosition,
+  xiamenPosition,
+  putianPosition,
+  shantouPosition,
 } from './const'
-import {
-  logCameraStateOnMouseEvents,
-  getLonLat,
-  LonLatType,
-} from './CesiumUtils'
+import { getLonLat, LonLatType } from './CesiumUtils'
 
 export class CesiumController {
   static viewer: Cesium.Viewer
@@ -61,11 +60,11 @@ export class CesiumController {
       destination: Cesium.Cartesian3.fromDegrees(
         destination.longitude,
         destination.latitude,
-        500000,
+        900000,
       ),
       orientation: {
         heading: Cesium.Math.toRadians(0), // 朝向
-        pitch: Cesium.Math.toRadians(-70), // 俯仰角
+        pitch: Cesium.Math.toRadians(-80), // 俯仰角
         roll: 0.0,
       },
       duration: 2, // 飞行时间(秒)
@@ -76,7 +75,11 @@ export class CesiumController {
     drawPoint(this.viewer, '台中', taizhongPosition)
     drawPoint(this.viewer, '高雄', gaoxiongPosition)
     drawPoint(this.viewer, '台南', tainanPosition)
+    drawPoint(this.viewer, '莆田', putianPosition)
+    drawPoint(this.viewer, '汕头', shantouPosition)
+    drawPoint(this.viewer, '厦门', xiamenPosition)
   }
+
   static clearAllMark() {
     this.drawTool && this.drawTool.clear()
   }

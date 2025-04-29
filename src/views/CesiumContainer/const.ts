@@ -6,10 +6,10 @@ export const taipeiPosition = Cesium.Cartesian3.fromDegrees(121.565, 25.033) // 
 export const taizhongPosition = Cesium.Cartesian3.fromDegrees(120.648, 24.163) // 台中
 export const gaoxiongPosition = Cesium.Cartesian3.fromDegrees(120.307, 22.624) // 高雄
 
-const putianPosition = Cesium.Cartesian3.fromDegrees(119.138, 25.292) // 莆田
-const shantouPosition = Cesium.Cartesian3.fromDegrees(116.686, 23.358) // 汕头
-const xiamenPosition = Cesium.Cartesian3.fromDegrees(118.116, 24.468) // 厦门
-const nanjingPosition = Cesium.Cartesian3.fromDegrees(
+export const putianPosition = Cesium.Cartesian3.fromDegrees(119.138, 25.292) // 莆田
+export const shantouPosition = Cesium.Cartesian3.fromDegrees(116.686, 23.358) // 汕头
+export const xiamenPosition = Cesium.Cartesian3.fromDegrees(118.116, 24.468) // 厦门
+export const nanjingPosition = Cesium.Cartesian3.fromDegrees(
   118.78211699999997,
   32.03577000000001,
 ) // 南京
@@ -172,11 +172,21 @@ export const MockScriptTableData = [
 
   {
     name: '攻T3',
-    key: 4,
+    key: 3,
     animationData: {
       name: 'air',
       startPosition: shantouPosition,
       endPosition: tainanPosition,
+      model: '/models/Cesium_Air.glb',
+    },
+  },
+  {
+    name: '攻T4',
+    key: 4,
+    animationData: {
+      name: 'air',
+      startPosition: xiamenPosition,
+      endPosition: gaoxiongPosition,
       model: '/models/Cesium_Air.glb',
     },
   },
@@ -188,7 +198,7 @@ export const MockScriptTableData = [
       name: 'air',
       startPosition: taipeiPosition,
       endPosition: tainanPosition,
-      model: '/models/CesiumBalloon.glb',
+      model: '/models/Cesium_Air.glb',
     },
   },
 ]
