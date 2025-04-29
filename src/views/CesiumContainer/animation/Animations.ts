@@ -34,6 +34,9 @@ export const moveAToBGLBV2 = async (viewer: Cesium.Viewer, item: IMoveItem) => {
       maximumScale: 200000,
     } as any,
   })
+  //   modelEntity.orientation = new Cesium.VelocityOrientationProperty(
+  //     modelEntity.position as Cesium.SampledPositionProperty
+  //   );
 
   // 5. 定义时间范围（重新初始化）
   const startTime = Cesium.JulianDate.fromDate(new Date())
