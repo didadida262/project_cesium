@@ -6,7 +6,7 @@ import StragitArrowTool from './tools/StragitArrowTool'
 import Polyline from './tools/Polyline'
 
 import { handleAnimation, moveAToBGLBV2 } from './animation/Animations'
-import { drawPoint } from './CesiumUtils'
+import { drawPoint, showExplosion } from './CesiumUtils'
 import {
   taipeiPosition,
   taizhongPosition,
@@ -78,6 +78,7 @@ export class CesiumController {
     drawPoint(this.viewer, '莆田', putianPosition)
     drawPoint(this.viewer, '汕头', shantouPosition)
     drawPoint(this.viewer, '厦门', xiamenPosition)
+    showExplosion(this.viewer, tainanPosition)
   }
 
   static clearAllMark() {

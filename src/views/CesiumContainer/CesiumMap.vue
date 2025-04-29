@@ -39,7 +39,7 @@
           /> -->
         </div>
       </div>
-      <div :class="['operation_content w-full h-[400px]']">
+      <div :class="['operation_content w-full h-[250px]']">
         <MarkContainer
           v-if="currenModel === '标注模式'"
           :on-click="handleSelectMark"

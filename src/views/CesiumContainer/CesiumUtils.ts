@@ -5,6 +5,37 @@ export interface LonLatType {
   latitude: number;
   height: number;
 }
+// 爆炸效果演示（可替换为更复杂的粒子系统）
+export const showExplosion = (
+  viewer: Cesium.Viewer,
+  position: Cesium.Cartesian3,
+) => {
+  //   const explosionPosition = position;
+  //   const matrix = Cesium.Transforms.eastNorthUpToFixedFrame(explosionPosition);
+  //   const particleSystem = viewer.scene.primitives.add(
+  //     new Cesium.ParticleSystem({
+  //       image: "/images/fire.png", // 需要放置透明爆炸贴图
+  //       startColor: Cesium.Color.ORANGE.withAlpha(0.8),
+  //       endColor: Cesium.Color.RED.withAlpha(0.1),
+  //       startScale: 2.0,
+  //       endScale: 5.0,
+  //       minimumParticleLife: 0.5,
+  //       maximumParticleLife: 1.0,
+  //       minimumSpeed: 5.0,
+  //       maximumSpeed: 20.0,
+  //       imageSize: new Cesium.Cartesian2(4000, 4000),
+  //       emissionRate: 100,
+  //       lifetime: 2.0,
+  //       emitter: new Cesium.SphereEmitter(5.0),
+  //       modelMatrix: matrix,
+  //       emitterModelMatrix: Cesium.Matrix4.IDENTITY,
+  //     })
+  //   );
+  //   // 5. 自动销毁粒子系统
+  //   setTimeout(() => {
+  //     viewer.scene.primitives.remove(particleSystem);
+  //   }, 3000);
+}
 
 export const getOrientation = (
   position: Cesium.Cartesian3,

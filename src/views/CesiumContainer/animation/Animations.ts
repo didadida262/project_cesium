@@ -1,6 +1,6 @@
 import * as Cesium from 'cesium'
 import { taipeiPosition, tainanPosition } from '../const'
-import { getOrientation } from '../CesiumUtils'
+import { getOrientation, showExplosion } from '../CesiumUtils'
 
 interface IMoveItem {
   startPosition: Cesium.Cartesian3;
@@ -71,6 +71,8 @@ export const moveAToBGLBV2 = async (viewer: Cesium.Viewer, item: IMoveItem) => {
       viewer.trackedEntity = undefined
       viewer.entities.remove(modelEntity)
       viewer.clock.onTick.removeEventListener(onTickHandler) // 移除监听
+      //   const maxTextureSize = Cesium.WebGLConstants.MAX_TEXTURE_SIZE;
+      //   console.log("Maximum texture size:", maxTextureSize);
     }
   })
 }
