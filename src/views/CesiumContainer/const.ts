@@ -6,6 +6,7 @@ export const taipeiPosition = Cesium.Cartesian3.fromDegrees(121.565, 25.033) // 
 export const taizhongPosition = Cesium.Cartesian3.fromDegrees(120.648, 24.163) // 台中
 export const gaoxiongPosition = Cesium.Cartesian3.fromDegrees(120.307, 22.624) // 高雄
 
+export const jinhuPosition = Cesium.Cartesian3.fromDegrees(119.04, 33.0) // 金湖
 export const putianPosition = Cesium.Cartesian3.fromDegrees(119.138, 25.292) // 莆田
 export const shantouPosition = Cesium.Cartesian3.fromDegrees(116.686, 23.358) // 汕头
 export const xiamenPosition = Cesium.Cartesian3.fromDegrees(118.116, 24.468) // 厦门

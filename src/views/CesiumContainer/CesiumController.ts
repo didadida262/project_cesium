@@ -15,6 +15,8 @@ import {
   xiamenPosition,
   putianPosition,
   shantouPosition,
+  nanjingPosition,
+  jinhuPosition,
 } from './const'
 import { getLonLat, LonLatType } from './CesiumUtils'
 
@@ -78,6 +80,8 @@ export class CesiumController {
     drawPoint(this.viewer, '莆田', putianPosition)
     drawPoint(this.viewer, '汕头', shantouPosition)
     drawPoint(this.viewer, '厦门', xiamenPosition)
+    drawPoint(this.viewer, '南京', nanjingPosition)
+    drawPoint(this.viewer, '金湖', jinhuPosition)
     showExplosion(this.viewer, tainanPosition)
   }
 
