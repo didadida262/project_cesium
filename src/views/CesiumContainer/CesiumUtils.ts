@@ -5,7 +5,7 @@ export interface LonLatType {
   latitude: number;
   height: number;
 }
-// 爆炸效果演示（可替换为更复杂的粒子系统）
+// 爆炸效果演示
 export const showExplosion = (
   viewer: Cesium.Viewer,
   position: Cesium.Cartesian3,
