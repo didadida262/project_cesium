@@ -235,10 +235,6 @@ export default class DrawTool {
         this.positions = []
         this.pointArr = []
         this.arrowEntity = null
-        // const point = this.creatPoint(cartesian);
-        // point.show = false;
-        // point.wz = this.positions.length;
-        // this.pointArr.push(point);
       },
       Cesium.ScreenSpaceEventType.RIGHT_CLICK,
     )
