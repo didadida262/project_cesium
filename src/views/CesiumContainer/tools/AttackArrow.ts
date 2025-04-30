@@ -1,5 +1,4 @@
 import * as Cesium from 'cesium'
-import ms from 'milsymbol'
 import { getCatesian3FromPX, cartesianToLatlng } from '../CesiumUtils'
 import { xp } from './drawArrow/algorithm'
 
@@ -11,6 +10,7 @@ interface FineArrowResult {
 }
 
 interface XpAlgorithm {
+  tailedAttackArrow(lnglatArr: number[][]): unknown;
   fineArrow: (
     start: [number, number],
     end: [number, number]
@@ -131,33 +131,23 @@ export default class DrawTool {
   }
 
   private showArrowOnMap(positions: Cesium.Cartesian3[]): Cesium.Entity {
-    const that = this
-    const update = function (): Cesium.PolygonHierarchy | null {
-      if (positions.length < 2) {
+    const update = () => {
+      //计算面
+      if (positions.length < 3) {
         return null
       }
-      const p1 = positions[1]
-      const p2 = positions[2]
-      const firstPoint = cartesianToLatlng(that.viewer, p1)
-      const endPoints = cartesianToLatlng(that.viewer, p2)
-
-      const arrow: Cesium.Cartesian3[] = []
-      const res = (xp as XpModule).algorithm.fineArrow(
-        [firstPoint[0], firstPoint[1]],
-        [endPoints[0], endPoints[1]],
-      )
-
-      const index = JSON.stringify(res).indexOf('null')
-      if (index !== -1) return new Cesium.PolygonHierarchy([])
-      for (let i = 0; i < res.length; i++) {
-        const c3 = new Cesium.Cartesian3(res[i].x, res[i].y, res[i].z || 0)
-        arrow.push(c3)
+      const lnglatArr = []
+      for (let i = 0; i < positions.length; i++) {
+        const lnglat = cartesianToLatlng(this.viewer, positions[i])
+        lnglatArr.push(lnglat)
       }
-      return new Cesium.PolygonHierarchy(arrow)
+      const res: any = (xp as XpModule).algorithm.tailedAttackArrow(lnglatArr)
+      const index = JSON.stringify(res.polygonalPoint).indexOf('null')
+      let returnData = []
+      if (index == -1) returnData = res.polygonalPoint
+      return new Cesium.PolygonHierarchy(returnData)
     }
-    return that.viewer.entities.add({
-      id: `${this.name}${Date.now()}`,
-      name: this.name,
+    return this.viewer.entities.add({
       polygon: new Cesium.PolygonGraphics({
         hierarchy: new Cesium.CallbackProperty(update, false),
         show: true,
@@ -242,11 +232,13 @@ export default class DrawTool {
           this.viewer.entities.remove(this.floatPoint)
         }
         this.floatPoint = null
-        const point = this.creatPoint(cartesian)
-        point.show = false
-        point.wz = this.positions.length
-        this.pointArr.push(point)
-        this._drawHandler?.destroy()
+        this.positions = []
+        this.pointArr = []
+        this.arrowEntity = null
+        // const point = this.creatPoint(cartesian);
+        // point.show = false;
+        // point.wz = this.positions.length;
+        // this.pointArr.push(point);
       },
       Cesium.ScreenSpaceEventType.RIGHT_CLICK,
     )
