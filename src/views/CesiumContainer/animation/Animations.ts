@@ -32,6 +32,8 @@ export const moveAToBGLBV2 = async (viewer: Cesium.Viewer, item: IMoveItem) => {
       uri: item.model,
       minimumPixelSize: 64,
       maximumScale: 200000,
+      heightReference: Cesium.HeightReference.CLAMP_TO_GROUND, // 或 RELATIVE_TO_GROUND
+      disableDepthTestDistance: Number.POSITIVE_INFINITY, // 关键设置
     } as any,
   })
   //   modelEntity.orientation = new Cesium.VelocityOrientationProperty(
