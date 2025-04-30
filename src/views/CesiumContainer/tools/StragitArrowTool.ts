@@ -57,7 +57,7 @@ export default class DrawTool {
     this._tempPositions = []
     this.temppath = null
     this.fillMaterial =
-      options?.fillMaterial || Cesium.Color.YELLOW.withAlpha(0.8)
+      options?.fillMaterial || Cesium.Color.RED.withAlpha(0.8)
     this.firstPoint = null
     this.floatPoint = null
     this.positions = []

@@ -66,8 +66,7 @@ export default class DrawTool {
 
     this.positions = []
     this.pointImageUrl = '/images/point.png'
-    this.fillMaterial =
-      Cesium.Color.fromCssColorString('#0000FF').withAlpha(0.8)
+    this.fillMaterial = Cesium.Color.RED.withAlpha(0.8)
     this.outlineMaterial = new Cesium.PolylineDashMaterialProperty({
       dashLength: 16,
       color: Cesium.Color.fromCssColorString('#f00').withAlpha(0.7),
@@ -92,7 +91,6 @@ export default class DrawTool {
     this.viewer.scene.globe.depthTestAgainstTerrain = true
     this._leftClickEvent()
     this._mouseMoveEvent()
-    // this._rightClickEvent();
   }
 
   private _removeAllEvent(): void {
@@ -227,27 +225,6 @@ export default class DrawTool {
         }
       },
       Cesium.ScreenSpaceEventType.MOUSE_MOVE,
-    )
-  }
-
-  private _rightClickEvent(): void {
-    this._drawHandler?.setInputAction(
-      (e: Cesium.ScreenSpaceEventHandler.PositionedEvent) => {
-        const cartesian = getCatesian3FromPX(e.position, this.viewer)
-        if (!cartesian) return
-        for (let i = 0; i < this.pointArr.length; i++) {
-          this.pointArr[i].show = false
-        }
-        if (this.floatPoint) {
-          this.floatPoint.show = false
-          this.viewer.entities.remove(this.floatPoint)
-        }
-        this.floatPoint = null
-        this.positions = []
-        this.pointArr = []
-        this.arrowEntity = null
-      },
-      Cesium.ScreenSpaceEventType.RIGHT_CLICK,
     )
   }
 }
