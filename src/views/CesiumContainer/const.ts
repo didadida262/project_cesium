@@ -124,10 +124,10 @@ export const MockMarkTableData = [
     name: '攻击箭头',
     key: 'AttackArrow',
   },
-  //   {
-  //     label: "钳形箭头",
-  //     key: "PincerArrow",
-  //   },
+  {
+    name: '钳形箭头',
+    key: 'PincerArrow',
+  },
 
   //   {
   //     label: "绘制区域",
