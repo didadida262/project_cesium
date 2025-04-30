@@ -3,7 +3,7 @@ import PointTool from './tools/PointTool'
 import LineTool from './tools/LineTool'
 import IconTool from './tools/IconTool'
 import StragitArrowTool from './tools/StragitArrowTool'
-import PolylineTool from './tools/PolylineTool'
+import AttackArrow from './tools/AttackArrow'
 import Polyline from './tools/Polyline'
 
 import { handleAnimation, moveAToBGLBV2 } from './animation/Animations'
@@ -123,8 +123,8 @@ export class CesiumController {
           console.log('data')
         })
         break
-      case 'Polyline':
-        this.drawTool = new PolylineTool(this.viewer)
+      case 'AttackArrow':
+        this.drawTool = new AttackArrow(this.viewer)
         this.drawTool.activate(type, (data: any) => {
           console.log('data')
         })

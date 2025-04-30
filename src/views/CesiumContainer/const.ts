@@ -116,14 +116,13 @@ export const MockMarkTableData = [
     key: 'Line',
   },
   {
-    name: '攻击箭头',
+    name: '直线箭头',
     key: 'StraightArrow',
   },
 
   {
-    name: '绘制多段线',
-
-    key: 'Polyline',
+    name: '攻击箭头',
+    key: 'AttackArrow',
   },
   //   {
   //     label: "钳形箭头",

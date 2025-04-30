@@ -30,6 +30,7 @@ interface DrawToolOptions {
 }
 
 interface CustomEntity extends Cesium.Entity {
+  wz: number;
   attr?: string;
   type?: string;
   position: Cesium.ConstantPositionProperty;
@@ -46,23 +47,43 @@ export default class DrawTool {
   public firstPoint: CustomEntity | null
   public floatPoint: CustomEntity | null
   public positions: Cesium.Cartesian3[]
-  public arrowEntity: Cesium.Entity | null
+  public arrowEntity: any
   public pointImageUrl?: string
+  state: number
+  selectPoint: null
+  clickStep: number
+  modifyHandler: null
+  outlineMaterial: Cesium.PolylineDashMaterialProperty
+  pointArr: any[]
+  objId: number
 
   constructor(viewer: Cesium.Viewer, options?: DrawToolOptions) {
-    this.name = 'StragitArrow'
+    this.name = 'AttackArrow'
     this.viewer = viewer
     this._drawHandler = null
     this._drawnEntities = []
     this._tempPositions = []
     this.temppath = null
+
+    this.positions = []
+    this.pointImageUrl = '/images/point.png'
     this.fillMaterial =
-      options?.fillMaterial || Cesium.Color.YELLOW.withAlpha(0.8)
+      Cesium.Color.fromCssColorString('#0000FF').withAlpha(0.8)
+    this.outlineMaterial = new Cesium.PolylineDashMaterialProperty({
+      dashLength: 16,
+      color: Cesium.Color.fromCssColorString('#f00').withAlpha(0.7),
+    })
     this.firstPoint = null
     this.floatPoint = null
-    this.positions = []
     this.arrowEntity = null
-    this.pointImageUrl = options?.pointImageUrl
+    this.state = -1 //state用于区分当前的状态 0 为删除 1为添加 2为编辑
+    this.selectPoint = null
+    this.clickStep = 0
+    this.modifyHandler = null
+    this.pointArr = [] //中间各点
+    this.objId = Number(
+      new Date().getTime() + '' + Number(Math.random() * 1000).toFixed(0),
+    ) //用于区分多个相同箭头时
   }
 
   private _registerEvents(callback?: Function): void {
@@ -70,8 +91,9 @@ export default class DrawTool {
       this.viewer.scene.canvas,
     )
     this.viewer.scene.globe.depthTestAgainstTerrain = true
-    this._leftClickEventForPolyline()
-    this._mouseMoveEventForPolyline()
+    this._leftClickEvent()
+    this._mouseMoveEvent()
+    this._rightClickEvent()
   }
 
   private _removeAllEvent(): void {
@@ -145,41 +167,58 @@ export default class DrawTool {
     })
   }
 
-  private creatPoint(cartesian: Cesium.Cartesian3): CustomEntity {
-    const point = this.viewer.entities.add({
+  public creatPoint(cartesian: Cesium.Cartesian3): any {
+    const point: any = this.viewer.entities.add({
       position: cartesian,
       billboard: {
         image: this.pointImageUrl,
         verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
-        disableDepthTestDistance: Number.POSITIVE_INFINITY,
+        //heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
       },
-    }) as CustomEntity
-
+    })
     point.attr = 'editPoint'
     return point
   }
 
-  private _leftClickEventForPolyline(): void {
+  private _leftClickEvent(): void {
     this._drawHandler?.setInputAction(
       (e: Cesium.ScreenSpaceEventHandler.PositionedEvent) => {
-        this._drawPath(e)
+        const cartesian = getCatesian3FromPX(e.position, this.viewer)
+        if (!cartesian) return
+        if (this.positions.length == 0) {
+          this.floatPoint = this.creatPoint(cartesian)
+          if (this.floatPoint) {
+            this.floatPoint.wz = -1
+          }
+        }
+        this.positions.push(cartesian)
+        const point = this.creatPoint(cartesian)
+        if (this.positions.length > 2) {
+          point.wz = this.positions.length - 1 //点对应的在positions中的位置  屏蔽mouseMove里往postions添加时 未创建点
+        } else {
+          point.wz = this.positions.length //点对应的在positions中的位置
+        }
+        this.pointArr.push(point)
       },
       Cesium.ScreenSpaceEventType.LEFT_CLICK,
     )
   }
 
-  private _mouseMoveEventForPolyline(): void {
+  private _mouseMoveEvent(): void {
     this._drawHandler?.setInputAction(
       (e: Cesium.ScreenSpaceEventHandler.MotionEvent) => {
-        if (this.positions.length < 1) return
+        //移动时绘制面
+        if (this.positions.length < 2) return
         const cartesian = getCatesian3FromPX(e.endPosition, this.viewer)
-        if (!cartesian || !this.floatPoint) return
-
-        this.floatPoint.position.setValue(cartesian)
+        if (!cartesian) return
+        if (this.floatPoint) {
+          this.floatPoint.position.setValue(cartesian)
+        }
         if (this.positions.length >= 2) {
           if (!Cesium.defined(this.arrowEntity)) {
             this.positions.push(cartesian)
             this.arrowEntity = this.showArrowOnMap(this.positions)
+            this.arrowEntity.objId = this.objId
           } else {
             this.positions.pop()
             this.positions.push(cartesian)
@@ -190,39 +229,26 @@ export default class DrawTool {
     )
   }
 
-  private _drawPath(e: Cesium.ScreenSpaceEventHandler.PositionedEvent): void {
-    const cartesian = getCatesian3FromPX(e.position, this.viewer)
-    console.log('cartesian>>>>', cartesian)
-    if (!cartesian) return
-
-    if (this.positions.length === 0) {
-      this.firstPoint = this.creatPoint(cartesian)
-      this.firstPoint.type = 'firstPoint'
-      this.floatPoint = this.creatPoint(cartesian)
-      this.floatPoint.type = 'floatPoint'
-      this.positions.push(cartesian)
-      this.positions.push(cartesian.clone())
-    }
-
-    if (this.positions.length === 3) {
-      if (this.firstPoint) this.firstPoint.show = false
-      if (this.floatPoint) this.floatPoint.show = false
-      this.positions = []
-      if (this.arrowEntity) {
-        const clonedEntity = new Cesium.Entity({
-          polygon: {
-            hierarchy: (this.arrowEntity.polygon as any).hierarchy,
-            material: (this.arrowEntity.polygon as any).material,
-            show: (this.arrowEntity.polygon as any).show,
-            fill: (this.arrowEntity.polygon as any).fill,
-          },
-          name: this.arrowEntity.name,
-        })
-        this.viewer.entities.add(clonedEntity)
-        this._drawnEntities.push(clonedEntity)
-        this.viewer.entities.remove(this.arrowEntity)
-        this.arrowEntity = null
-      }
-    }
+  private _rightClickEvent(): void {
+    this._drawHandler?.setInputAction(
+      (e: Cesium.ScreenSpaceEventHandler.PositionedEvent) => {
+        const cartesian = getCatesian3FromPX(e.position, this.viewer)
+        if (!cartesian) return
+        for (let i = 0; i < this.pointArr.length; i++) {
+          this.pointArr[i].show = false
+        }
+        if (this.floatPoint) {
+          this.floatPoint.show = false
+          this.viewer.entities.remove(this.floatPoint)
+        }
+        this.floatPoint = null
+        const point = this.creatPoint(cartesian)
+        point.show = false
+        point.wz = this.positions.length
+        this.pointArr.push(point)
+        this._drawHandler?.destroy()
+      },
+      Cesium.ScreenSpaceEventType.RIGHT_CLICK,
+    )
   }
 }
