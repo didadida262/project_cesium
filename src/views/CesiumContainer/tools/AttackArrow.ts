@@ -67,7 +67,7 @@ export default class DrawTool {
 
     this.positions = []
     this.pointImageUrl = '/images/point.png'
-    this.fillMaterial = Cesium.Color.RED.withAlpha(0.8)
+    this.fillMaterial = Cesium.Color.RED.withAlpha(0.5)
     this.outlineMaterial = new Cesium.PolylineDashMaterialProperty({
       dashLength: 16,
       color: Cesium.Color.fromCssColorString('#f00').withAlpha(0.7),
