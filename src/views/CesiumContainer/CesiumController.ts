@@ -56,16 +56,7 @@ export class CesiumController {
       minimumLevel: 3,
       maximumLevel: 18,
     })
-    const imageryProvider_tencent = new Cesium.UrlTemplateImageryProvider({
-      url: 'https://rt1.map.gtimg.com/realtimerender?z={z}&x={x}&y={-y}&type=vector&style=6',
-      minimumLevel: 3,
-      maximumLevel: 18,
-    })
-    const imageryProvider_biying = new Cesium.BingMapsImageryProvider({
-      url: 'https://dev.virtualearth.net',
-      key: '您的Bing密钥',
-      mapStyle: Cesium.BingMapsStyle.AERIAL,
-    })
+
     this.viewer = new Cesium.Viewer(containerId, {
       selectionIndicator: false, // 禁用选择指示器
       infoBox: false, // 禁用右侧信息面板
