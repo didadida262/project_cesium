@@ -31,14 +31,45 @@ export class CesiumController {
     this.drawTool && this.drawTool._removeAllEvent()
   }
   static init_world(containerId: string) {
-    Cesium.Ion.defaultAccessToken =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJhMTQ4ZmRhMS00MjY3LTRlZTgtOGU3Yi01OTY4NTEwN2NkYzciLCJpZCI6Mjk0MTEyLCJpYXQiOjE3NDQ2ODU2OTd9.yMNzVcVvq9NI2sXWePenGj5ZJbshJqiGqctlNlDWEDA'
+    // Cesium.Ion.defaultAccessToken =
+    //   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJhMTQ4ZmRhMS00MjY3LTRlZTgtOGU3Yi01OTY4NTEwN2NkYzciLCJpZCI6Mjk0MTEyLCJpYXQiOjE3NDQ2ODU2OTd9.yMNzVcVvq9NI2sXWePenGj5ZJbshJqiGqctlNlDWEDA";
+
+    const imageryProviderV1 = new Cesium.ArcGisMapServerImageryProvider({
+      url: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer',
+    })
+    const imageryProviderv2_GeoQ = new Cesium.UrlTemplateImageryProvider({
+      url: 'https://map.geoq.cn/arcgis/rest/services/ChinaOnlineCommunity/MapServer/tile/{z}/{y}/{x}',
+    })
+
+    const imageryProvider_tianditu =
+      new Cesium.WebMapTileServiceImageryProvider({
+        url: 'http://t0.tianditu.gov.cn/img_w/wmts?tk=wW719713496',
+        layer: 'img',
+        style: 'default',
+        format: 'tiles',
+        tileMatrixSetID: 'w',
+        maximumLevel: 18,
+      })
+    //   ok
+    const imageryProvider_gaode = new Cesium.UrlTemplateImageryProvider({
+      url: 'https://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
+      minimumLevel: 3,
+      maximumLevel: 18,
+    })
+    const imageryProvider_tencent = new Cesium.UrlTemplateImageryProvider({
+      url: 'https://rt1.map.gtimg.com/realtimerender?z={z}&x={x}&y={-y}&type=vector&style=6',
+      minimumLevel: 3,
+      maximumLevel: 18,
+    })
+    const imageryProvider_biying = new Cesium.BingMapsImageryProvider({
+      url: 'https://dev.virtualearth.net',
+      key: '您的Bing密钥',
+      mapStyle: Cesium.BingMapsStyle.AERIAL,
+    })
     this.viewer = new Cesium.Viewer(containerId, {
       selectionIndicator: false, // 禁用选择指示器
       infoBox: false, // 禁用右侧信息面板
-      imageryProvider: new Cesium.ArcGisMapServerImageryProvider({
-        url: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer',
-      }),
+      imageryProvider: imageryProvider_gaode,
 
       timeline: false, // 是否显示时间线控件
       baseLayerPicker: false,
