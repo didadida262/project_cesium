@@ -60,7 +60,7 @@ export class CesiumController {
     this.viewer = new Cesium.Viewer(containerId, {
       selectionIndicator: false, // 禁用选择指示器
       infoBox: false, // 禁用右侧信息面板
-      imageryProvider: imageryProvider_gaode,
+      imageryProvider: imageryProviderV1,
 
       timeline: false, // 是否显示时间线控件
       baseLayerPicker: false,

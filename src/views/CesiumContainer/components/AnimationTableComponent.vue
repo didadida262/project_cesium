@@ -30,6 +30,7 @@
           :class="[
             'w-[calc(48%)] h-full',
             'flex justify-between items-center ',
+            'select-none',
           ]"
         >
           {{ item.name }}
@@ -38,6 +39,7 @@
           :class="[
             'flex justify-between items-center ',
             'w-[calc(48%)] h-full',
+            'select-none',
           ]"
         >
           {{ item.key }}
