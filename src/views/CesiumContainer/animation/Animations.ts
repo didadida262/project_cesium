@@ -8,6 +8,11 @@ interface IMoveItem {
   model: string;
   name: string;
 }
+interface IMoveItemV2 {
+  positions: Cesium.Cartesian3[]; // 替换原来的startPosition和endPosition
+  model: string;
+  name: string;
+}
 
 export const handleAnimation = async (viewer: Cesium.Viewer, item: any) => {
   //   await moveAToBGLB(viewer, item.animationData);
@@ -15,7 +20,10 @@ export const handleAnimation = async (viewer: Cesium.Viewer, item: any) => {
   await moveAToBGLBV3(viewer, item.animationData)
 }
 // 支持多点运动
-export const moveAToBGLBV3 = async (viewer: Cesium.Viewer, item: any) => {
+export const moveAToBGLBV3 = async (
+  viewer: Cesium.Viewer,
+  item: IMoveItemV2,
+) => {
   if (!viewer || !item.positions || item.positions.length < 2) return
 
   viewer.clock.shouldAnimate = true // 确保时钟可以动画
@@ -85,12 +93,6 @@ export const moveAToBGLBV3 = async (viewer: Cesium.Viewer, item: any) => {
   })
 }
 
-// 更新后的接口定义（示例）
-interface IMoveItem {
-  name: string;
-  model: string;
-  positions: Cesium.Cartesian3[]; // 替换原来的startPosition和endPosition
-}
 // 自动校正模型方向
 export const moveAToBGLBV2 = async (viewer: Cesium.Viewer, item: IMoveItem) => {
   if (!viewer) return
