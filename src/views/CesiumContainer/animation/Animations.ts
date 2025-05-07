@@ -49,7 +49,7 @@ export const moveAToBGLBV3 = async (
 
   // 5. 定义时间范围（基于点数计算总时间）
   const startTime = Cesium.JulianDate.fromDate(new Date())
-  const durationPerSegment = 5 // 每段运动时间（秒）
+  const durationPerSegment = 2 // 每段运动时间（秒）
   const totalDuration = durationPerSegment * (item.positions.length - 1)
   const stopTime = Cesium.JulianDate.addSeconds(
     startTime,
