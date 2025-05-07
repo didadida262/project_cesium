@@ -146,8 +146,13 @@ export const MockScriptTableData = [
     key: 1,
     animationData: {
       name: 'air',
-      startPosition: putianPosition,
-      endPosition: taipeiPosition,
+      positions: [
+        putianPosition,
+        taipeiPosition,
+        taizhongPosition,
+        tainanPosition,
+        gaoxiongPosition,
+      ],
       model: '/models/Cesium_Air.glb',
     },
   },
@@ -157,8 +162,8 @@ export const MockScriptTableData = [
     key: 2,
     animationData: {
       name: 'air',
-      startPosition: xiamenPosition,
-      endPosition: taizhongPosition,
+      positions: [xiamenPosition, taizhongPosition],
+
       model: '/models/Cesium_Air.glb',
     },
   },
@@ -168,8 +173,7 @@ export const MockScriptTableData = [
     key: 3,
     animationData: {
       name: 'air',
-      startPosition: shantouPosition,
-      endPosition: tainanPosition,
+      positions: [shantouPosition, tainanPosition],
       model: '/models/Cesium_Air.glb',
     },
   },
@@ -178,8 +182,7 @@ export const MockScriptTableData = [
     key: 4,
     animationData: {
       name: 'air',
-      startPosition: xiamenPosition,
-      endPosition: gaoxiongPosition,
+      positions: [xiamenPosition, gaoxiongPosition],
       model: '/models/Cesium_Air.glb',
     },
   },
@@ -189,8 +192,7 @@ export const MockScriptTableData = [
     key: 5,
     animationData: {
       name: 'air',
-      startPosition: taipeiPosition,
-      endPosition: tainanPosition,
+      positions: [taipeiPosition, tainanPosition],
       model: '/models/Cesium_Air.glb',
     },
   },
