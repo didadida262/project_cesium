@@ -61,7 +61,8 @@ export const moveAToBGLBV3 = async (
   viewer.clock.startTime = startTime.clone()
   viewer.clock.stopTime = stopTime.clone()
   viewer.clock.currentTime = startTime.clone()
-  viewer.clock.clockRange = Cesium.ClockRange.CLAMPED
+  //   viewer.clock.clockRange = Cesium.ClockRange.CLAMPED;
+  viewer.clock.clockRange = Cesium.ClockRange.LOOP_STOP // 无限循环
 
   // 7. 设置路径关键点（多个位置点）
   const positionProperty = new Cesium.SampledPositionProperty()
