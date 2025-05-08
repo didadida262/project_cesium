@@ -146,6 +146,7 @@ export const MockScriptTableData = [
     key: 1,
     animationData: {
       name: 'air',
+      degree: 0,
       positions: [
         putianPosition,
         taipeiPosition,
@@ -153,7 +154,7 @@ export const MockScriptTableData = [
         tainanPosition,
         gaoxiongPosition,
       ],
-      model: '/models/Cesium_Air.glb',
+      model: '/models/SK_East_Fighter_Su33.glb',
     },
   },
 
@@ -162,8 +163,8 @@ export const MockScriptTableData = [
     key: 2,
     animationData: {
       name: 'air',
+      degree: -90,
       positions: [xiamenPosition, taizhongPosition],
-
       model: '/models/Cesium_Air.glb',
     },
   },
@@ -173,6 +174,8 @@ export const MockScriptTableData = [
     key: 3,
     animationData: {
       name: 'air',
+      degree: -90,
+
       positions: [shantouPosition, tainanPosition],
       model: '/models/Cesium_Air.glb',
     },
@@ -183,6 +186,7 @@ export const MockScriptTableData = [
     animationData: {
       name: 'air',
       positions: [xiamenPosition, gaoxiongPosition],
+      degree: -90,
       model: '/models/Cesium_Air.glb',
     },
   },
@@ -192,6 +196,8 @@ export const MockScriptTableData = [
     key: 5,
     animationData: {
       name: 'air',
+      degree: -90,
+
       positions: [taipeiPosition, tainanPosition],
       model: '/models/Cesium_Air.glb',
     },

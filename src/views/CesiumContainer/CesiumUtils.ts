@@ -13,11 +13,11 @@ export const showExplosion = (
   if (!viewer) return
 }
 
-export const getOrientation = (
-  position: Cesium.Cartesian3,
-  startPosition: Cesium.Cartesian3,
-  endPosition: Cesium.Cartesian3,
-) => {
+export const getOrientation = (item: any) => {
+  const position = item.positions[0]
+  const startPosition = item.positions[0]
+  const endPosition = item.positions[1]
+  const degree = item.degree
   // 1. 计算方向向量
   const direction = Cesium.Cartesian3.subtract(
     endPosition,
@@ -37,7 +37,8 @@ export const getOrientation = (
 
   // 3. 生成Orientation
   const hpr = new Cesium.HeadingPitchRoll(
-    heading + Cesium.Math.toRadians(-90),
+    // 矫正坐标系，偏移x-90
+    heading + Cesium.Math.toRadians(degree),
     0,
     0,
   )
