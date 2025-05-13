@@ -3,17 +3,16 @@
     <div
       id="shareArea"
       ref="contentRef"
-      class="w-[calc(50%)] h-[100px] overflow-y-auto markBorderR"
+      class="w-[calc(50%)] h-full overflow-y-auto markBorderR"
     >
       <!-- <CesiumContainer /> -->
-      <p>这是一段文本1</p>
-      <p>这是一段文本2</p>
-      <p>这是一段文本3</p>
-      <p>这是一段文本4</p>
-      <p>这是一段文本5</p>
-      <p>这是一段文本6</p>
-      <p>这是一段文本7</p>
-      <p>这是一段文本89</p>
+      <video
+        src="./test.MP4"
+        autoplay
+        muted
+        controls
+        class="w-full h-full"
+      />
     </div>
     <div class="w-[calc(50%)] h-full">
       <PicShare />
