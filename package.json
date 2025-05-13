@@ -43,7 +43,8 @@
     "uuid": "^11.1.0",
     "v-click-outside": "^3.2.0",
     "vite": "^2.8.4",
-    "vite-plugin-cesium": "~1.2.22"
+    "vite-plugin-cesium": "~1.2.22",
+    "ws": "^8.18.2"
   },
   "lint-staged": {
     "*.{js,ts,vue}": "eslint --cache --fix",
