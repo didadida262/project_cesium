@@ -1,7 +1,7 @@
 <template>
   <div
     :class="[
-      'px-[10px] py-[5px] w-[150px]  flex justify-center items-center h-[50px]',
+      'px-[10px] py-[5px] w-[150px]  flex justify-center items-center h-[50px] selected-none',
       'border-[2px] border-solid border-[#383B45] rounded-md',
       'hover:cursor-pointer hover:scale-105 transition-transform duration-300',
       currenModel === text
