@@ -11,7 +11,7 @@
       <div class="w-[calc(48%)] h-full flex items-center">
         名称
       </div>
-      <div class="w-[calc(48%)] h-full flex items-center">
+      <div class="w-[calc(48%)] h-full flex items-center justify-center">
         ID
       </div>
     </div>
@@ -44,12 +44,20 @@
         </div>
         <div
           :class="[
-            'flex justify-between items-center ',
+            'flex justify-center items-center',
             'w-[calc(48%)] h-full',
             'select-none',
           ]"
         >
-          {{ item.key }}
+          <component
+            :is="getIconComponent(item.key)"
+            :class="[
+              'w-5 h-5',
+              selectedItem === item.key || selectedItem === item
+                ? 'text-[#FB685C]'
+                : 'text-[#DCF0FF]',
+            ]"
+          />
         </div>
       </div>
     </div>
@@ -57,7 +65,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref, h } from 'vue'
 
 const props = defineProps<{
   data: any;
@@ -71,6 +79,84 @@ const selectedItem = ref<any>(null)
 const handleRowClick = (item: any) => {
   selectedItem.value = item.key || item
   props.onClick(item)
+}
+
+// 根据key返回对应的图标组件
+const getIconComponent = (key: string) => {
+  const iconMap: Record<string, any> = {
+    Point: () => h('svg', {
+      viewBox: '0 0 24 24',
+      fill: 'currentColor',
+      class: 'w-5 h-5'
+    }, [
+      h('circle', {
+        cx: '12',
+        cy: '12',
+        r: '4'
+      })
+    ]),
+    Line: () => h('svg', {
+      viewBox: '0 0 24 24',
+      fill: 'none',
+      stroke: 'currentColor',
+      'stroke-width': '2',
+      'stroke-linecap': 'round',
+      class: 'w-5 h-5'
+    }, [
+      h('line', {
+        x1: '4',
+        y1: '12',
+        x2: '20',
+        y2: '12'
+      })
+    ]),
+    StraightArrow: () => h('svg', {
+      viewBox: '0 0 24 24',
+      fill: 'none',
+      stroke: 'currentColor',
+      'stroke-width': '2',
+      'stroke-linecap': 'round',
+      'stroke-linejoin': 'round',
+      class: 'w-5 h-5'
+    }, [
+      h('line', {
+        x1: '4',
+        y1: '12',
+        x2: '16',
+        y2: '12'
+      }),
+      h('polyline', {
+        points: '14,8 18,12 14,16'
+      })
+    ]),
+    AttackArrow: () => h('svg', {
+      viewBox: '0 0 24 24',
+      fill: 'currentColor',
+      class: 'w-5 h-5'
+    }, [
+      h('path', {
+        d: 'M3 12 L12 3 L21 12 L12 21 Z'
+      })
+    ]),
+    PincerArrow: () => h('svg', {
+      viewBox: '0 0 24 24',
+      fill: 'none',
+      stroke: 'currentColor',
+      'stroke-width': '2',
+      'stroke-linecap': 'round',
+      'stroke-linejoin': 'round',
+      class: 'w-5 h-5'
+    }, [
+      h('path', {
+        d: 'M3 12 L8 7 L12 12 L16 7 L21 12'
+      }),
+      h('path', {
+        d: 'M3 12 L8 17 L12 12 L16 17 L21 12'
+      })
+    ])
+  }
+  
+  return iconMap[key] || (() => h('span', {}, key))
 }
 </script>
 <style scoped>
