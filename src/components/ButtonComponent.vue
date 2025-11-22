@@ -1,9 +1,10 @@
 <template>
   <div
     :class="[
-      'px-[10px] py-[5px] w-[150px]  flex justify-center items-center h-[50px]',
+      'px-[8px] py-[4px] min-w-[120px] flex justify-center items-center h-[36px]',
       'border-[2px] border-solid border-[#383B45] rounded-md',
-      'hover:cursor-pointer hover:scale-105 transition-transform duration-300',
+      'hover:cursor-pointer transition-all duration-300',
+      'text-[14px] whitespace-nowrap',
       currenModel === text
         ? 'bg-[rgb(30,32,34)] selected'
         : 'bg-[rgb(18,20,22)]',

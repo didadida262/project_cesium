@@ -2,7 +2,7 @@
   <div class="w-full h-full flex flex-col justify-between items-center">
     <div
       :class="[
-        'header w-full h-[30px] text-[14px]  flex justify-between items-center px-[10px]',
+        'header w-full h-[26px] text-[12px]  flex justify-between items-center px-[10px]',
         `text-[${color}]`,
         'border-b-[2px] border-solid border-[#383B45] ',
       ]"
@@ -19,7 +19,7 @@
         v-for="(item, index) in data"
         :key="index"
         :class="[
-          'w-full h-[50px] text-[#DCF0FF] ',
+          'w-full h-[40px] text-[12px] text-[#DCF0FF] ',
           'flex justify-between items-center px-[10px]',
           'hover:cursor-pointer hover:bg-red-500 duration-300',
           'border-b-[2px] border-solid border-[#383B45] ',
