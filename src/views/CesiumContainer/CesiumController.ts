@@ -20,6 +20,7 @@ import {
   shantouPosition,
   nanjingPosition,
   jinhuPosition,
+  beijingPosition,
 } from './const'
 import { getLonLat, LonLatType } from './CesiumUtils'
 
@@ -108,6 +109,27 @@ export class CesiumController {
     drawPoint(this.viewer, '南京', nanjingPosition)
     drawPoint(this.viewer, '金湖', jinhuPosition)
     showExplosion(this.viewer, tainanPosition)
+  }
+
+  static flyToBeijing() {
+    if (!this.viewer) return
+    const destination: LonLatType = getLonLat(beijingPosition)
+    // 使用flyTo定位
+    this.viewer.camera.flyTo({
+      destination: Cesium.Cartesian3.fromDegrees(
+        destination.longitude,
+        destination.latitude,
+        500000,
+      ),
+      orientation: {
+        heading: Cesium.Math.toRadians(0), // 朝向
+        pitch: Cesium.Math.toRadians(-80), // 俯仰角
+        roll: 0.0,
+      },
+      duration: 2, // 飞行时间(秒)
+    })
+    // 添加标记
+    drawPoint(this.viewer, '北京', beijingPosition)
   }
 
   static clearAllMark() {

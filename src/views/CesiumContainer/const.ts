@@ -14,6 +14,7 @@ export const nanjingPosition = Cesium.Cartesian3.fromDegrees(
   118.78211699999997,
   32.03577000000001,
 ) // 南京
+export const beijingPosition = Cesium.Cartesian3.fromDegrees(116.4074, 39.9042) // 北京
 export const ways = [
   {
     name: '1',
@@ -201,5 +202,17 @@ export const MockScriptTableData = [
       positions: [taipeiPosition, tainanPosition],
       model: '/models/Cesium_Air.glb',
     },
+  },
+]
+
+// 地点跳转数据
+export const MockLocationJumpTableData = [
+  {
+    name: '北京',
+    key: 'beijing',
+  },
+  {
+    name: '台湾',
+    key: 'taiwan',
   },
 ]

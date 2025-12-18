@@ -92,6 +92,10 @@
           'rounded-lg overflow-hidden',
         ]"
       >
+        <LocationJumpContainer
+          v-if="currenModel === '跳转至目标地点'"
+          :on-click="handleSelectLocation"
+        />
         <MarkContainer
           v-if="currenModel === '标注模式'"
           :on-click="handleSelectMark"
@@ -125,6 +129,7 @@ import { BTNMap, options, MockPointData } from './const'
 import DrawFlagContainer from './components/DrawFlagContainer.vue'
 import DrawAnimationContainer from './components/DrawAnimationContainer.vue'
 import MarkContainer from './components/MarkContainer.vue'
+import LocationJumpContainer from './components/LocationJumpContainer.vue'
 
 const currenModel = ref('')
 const operationPanelRef = ref<HTMLElement | null>(null)
@@ -218,18 +223,25 @@ const handleClear = () => {
 const handleSelectMark = (item: any) => {
   CesiumController.mark(item.key)
 }
+const handleSelectLocation = (item: any) => {
+  if (item.key === 'beijing') {
+    CesiumController.flyToBeijing()
+  } else if (item.key === 'taiwan') {
+    CesiumController.flyToTaiwan()
+  }
+}
 const handleClickBTN = (btn: any) => {
   currenModel.value = btn.text
   CesiumController.remove()
   
-  // 如果点击的是带有表格的按钮（标注模式、动效演示、图标绘制），且当前处于收起状态，则自动展开
-  if ((btn.key === 'mark' || btn.key === 'situation' || btn.key === 'drawFlag') && isCollapsed.value) {
+  // 如果点击的是带有表格的按钮（跳转至目标地点、标注模式、动效演示、图标绘制），且当前处于收起状态，则自动展开
+  if ((btn.key === 'jump' || btn.key === 'mark' || btn.key === 'situation' || btn.key === 'drawFlag') && isCollapsed.value) {
     isCollapsed.value = false
   }
   
   switch (btn.key) {
     case 'jump':
-      CesiumController.flyToTaiwan()
+      // 不再自动跳转，而是显示表格让用户选择
       break
     // case "situation":
     //   CesiumController.showSituation();
