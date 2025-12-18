@@ -184,10 +184,14 @@ export const getCatesian3FromPX = (point: any, viewer: Cesium.Viewer) => {
       }
     }
   } else {
-    // 优先使用globe.pick获取准确的地面位置，不依赖depthTestAgainstTerrain
-    const ray = viewer.camera.getPickRay(point)
-    if (!ray) return null
-    cartesian = viewer.scene.globe.pick(ray, viewer.scene)
+    // 使用pickPosition获取准确的位置（需要depthTestAgainstTerrain，由工具自己设置）
+    cartesian = viewer.scene.pickPosition(point)
+    // 如果pickPosition失败，回退到globe.pick
+    if (!cartesian) {
+      const ray = viewer.camera.getPickRay(point)
+      if (!ray) return null
+      cartesian = viewer.scene.globe.pick(ray, viewer.scene)
+    }
   }
   return cartesian
 }

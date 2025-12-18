@@ -247,6 +247,12 @@ const handleClickBTN = (btn: any) => {
     case 'jump':
       // 不再自动跳转，而是显示表格让用户选择
       break
+    case 'mark':
+      // 进入标注模式时，自动关闭边境线
+      if (CesiumController.chinaBorderDataSource) {
+        CesiumController.toggleChinaBorder(false)
+      }
+      break
     // case "situation":
     //   CesiumController.showSituation();
     //   CesiumController.flyToTaiwan();
