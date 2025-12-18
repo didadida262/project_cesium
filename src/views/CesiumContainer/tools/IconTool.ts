@@ -43,7 +43,8 @@ export default class DrawTool {
     this._drawHandler = new Cesium.ScreenSpaceEventHandler(
       this.viewer.scene.canvas,
     )
-    this.viewer.scene.globe.depthTestAgainstTerrain = true // 开启深度测试
+    // 移除深度测试设置，避免影响GeoJSON边界线的渲染
+    // this.viewer.scene.globe.depthTestAgainstTerrain = true // 开启深度测试
     this._leftClickEventForPoint()
   }
 
