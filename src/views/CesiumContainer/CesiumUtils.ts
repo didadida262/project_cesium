@@ -119,21 +119,41 @@ export const drawPoint = (
     name: label,
     position: position,
     point: {
-      pixelSize: 10,
+      pixelSize: 12, // 增大点的大小
       color: Cesium.Color.RED,
       outlineColor: Cesium.Color.WHITE,
       outlineWidth: 2,
       disableDepthTestDistance: Number.POSITIVE_INFINITY, // 关键设置
       heightReference: Cesium.HeightReference.NONE,
+      // 根据距离自适应点的大小
+      scaleByDistance: new Cesium.NearFarScalar(
+        2000000,  // 2000公里内
+        1.0,      // 正常大小
+        8000000,  // 8000公里外
+        0.6,      // 缩小到60%
+      ),
     },
     label: {
       text: label,
+      font: '20px sans-serif', // 进一步增大基础字体大小
       style: Cesium.LabelStyle.FILL_AND_OUTLINE,
       outlineWidth: 2,
       verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
       pixelOffset: new Cesium.Cartesian2(0, -10),
       disableDepthTestDistance: Number.POSITIVE_INFINITY, // 关键设置
       heightReference: Cesium.HeightReference.NONE,
+      // 根据距离自适应标签大小，在远距离时适度缩小
+      scaleByDistance: new Cesium.NearFarScalar(
+        2000000,  // 2000公里内
+        1.0,      // 正常大小
+        8000000,  // 8000公里外
+        0.7,      // 缩小到70%
+      ),
+      // 根据距离控制标签显示范围
+      distanceDisplayCondition: new Cesium.DistanceDisplayCondition(
+        0,        // 最小距离（总是显示）
+        25000000, // 最大距离（25000公里外不显示）
+      ),
     },
   })
 }
