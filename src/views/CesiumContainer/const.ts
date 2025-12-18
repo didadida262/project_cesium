@@ -38,6 +38,10 @@ export const ways = [
 
 export const BTNMap = [
   {
+    text: '通用配置',
+    key: 'config',
+  },
+  {
     text: '跳转至目标地点',
     key: 'jump',
   },
@@ -53,10 +57,6 @@ export const BTNMap = [
   {
     text: '图标绘制',
     key: 'drawFlag',
-  },
-  {
-    text: '通用配置',
-    key: 'config',
   },
 ]
 export const options = [
