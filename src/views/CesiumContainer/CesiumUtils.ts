@@ -161,18 +161,30 @@ export const drawPoint = (
 export const getCatesian3FromPX = (point: any, viewer: Cesium.Viewer) => {
   const picks = viewer.scene.drillPick(point)
   let cartesian
-  let isOn3dtiles = true
+  let isOn3dtiles = false
+  // 检查是否点击在3D tiles上
   for (let i = 0; i < picks.length; i++) {
     if (
       (picks[i] && picks[i].primitive) ||
       picks[i] instanceof Cesium.Cesium3DTileFeature
     ) {
       isOn3dtiles = true
+      break
     }
   }
+  
+  // 如果点击在3D tiles上，使用pickPosition；否则使用globe.pick获取准确的地面位置
   if (isOn3dtiles) {
     cartesian = viewer.scene.pickPosition(point)
+    // 如果pickPosition失败，回退到globe.pick
+    if (!cartesian) {
+      const ray = viewer.camera.getPickRay(point)
+      if (ray) {
+        cartesian = viewer.scene.globe.pick(ray, viewer.scene)
+      }
+    }
   } else {
+    // 优先使用globe.pick获取准确的地面位置，不依赖depthTestAgainstTerrain
     const ray = viewer.camera.getPickRay(point)
     if (!ray) return null
     cartesian = viewer.scene.globe.pick(ray, viewer.scene)

@@ -139,7 +139,10 @@ export default class DrawTool {
   private _leftClickEventForPolyline(): void {
     this._drawHandler?.setInputAction(
       (e: Cesium.ScreenSpaceEventHandler.PositionedEvent) => {
-        const p = this.viewer.scene.pickPosition(e.position)
+        // 使用 globe.pick 获取准确的地面位置，不依赖 depthTestAgainstTerrain
+        const ray = this.viewer.camera.getPickRay(e.position)
+        if (!ray) return
+        const p = this.viewer.scene.globe.pick(ray, this.viewer.scene)
         if (!p) return
 
         this._tempPositions.push(p)
@@ -221,7 +224,10 @@ export default class DrawTool {
   private _mouseMoveEventForPolyline(): void {
     this._drawHandler?.setInputAction(
       (e: Cesium.ScreenSpaceEventHandler.MotionEvent) => {
-        const p = this.viewer.scene.pickPosition(e.endPosition)
+        // 使用 globe.pick 获取准确的地面位置，不依赖 depthTestAgainstTerrain
+        const ray = this.viewer.camera.getPickRay(e.endPosition)
+        if (!ray) return
+        const p = this.viewer.scene.globe.pick(ray, this.viewer.scene)
         if (!p) return
         this._mousePos = p
       },
