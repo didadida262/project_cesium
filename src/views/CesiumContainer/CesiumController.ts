@@ -242,14 +242,14 @@ export class CesiumController {
 
   /**
    * 绘制中国边境线
-   * 使用阿里云数据可视化平台提供的官方中国边界数据
-   * @param geoJsonUrl GeoJSON数据源的URL（可选，默认使用阿里云官方数据）
+   * 从本地 GeoData.json 文件读取数据
+   * @param geoJsonUrl GeoJSON数据源的URL（可选，默认使用本地文件）
    */
   static async drawChinaBorder(geoJsonUrl?: string) {
     if (!this.viewer) return
 
-    // 使用阿里云数据可视化平台的官方中国边界数据
-    const defaultGeoJsonUrl = 'https://geo.datav.aliyun.com/areas_v3/bound/100000_full.json'
+    // 使用本地 GeoData.json 文件
+    const defaultGeoJsonUrl = '/GeoData.json'
     const url = geoJsonUrl || defaultGeoJsonUrl
 
     try {
@@ -295,7 +295,7 @@ export class CesiumController {
         duration: 2,
       })
       
-      console.log('边境线已绘制（使用原始geo数据）')
+      console.log('边境线已绘制（使用本地GeoData.json文件）')
       return geoJsonDataSource
     } catch (error) {
       console.error('加载GeoJSON数据失败:', error)
