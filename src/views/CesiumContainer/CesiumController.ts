@@ -236,111 +236,12 @@ export class CesiumController {
     const url = geoJsonUrl || defaultGeoJsonUrl
 
     try {
-      // 加载GeoJSON数据，不使用默认样式
-      const geoJsonDataSource = await Cesium.GeoJsonDataSource.load(url, {
-        stroke: Cesium.Color.TRANSPARENT,
-        fill: Cesium.Color.TRANSPARENT,
-        strokeWidth: 0,
-      })
-      
-      // 先隐藏所有原始实体
-      const entities = geoJsonDataSource.entities.values
-      entities.forEach((entity: Cesium.Entity) => {
-        entity.show = false
-      })
+      // 加载GeoJSON数据，使用默认样式
+      const geoJsonDataSource = await Cesium.GeoJsonDataSource.load(url)
       
       this.viewer.dataSources.add(geoJsonDataSource)
       
-      console.log('加载的实体数量:', entities.length)
-      
-      // 判断是否为省级数据（通过adcode判断，100000是中国，其他是省份）
-      entities.forEach((entity: Cesium.Entity, index: number) => {
-        const properties = entity.properties
-        const adcode = properties && properties.getProperty ? properties.getProperty('adcode') : null
-        const isProvince = adcode && adcode !== 100000
-        
-        // 处理polygon，将其转换为polyline边界
-        if (entity.polygon && entity.polygon.hierarchy) {
-          // 处理PolygonHierarchy或Property
-          let hierarchy: Cesium.PolygonHierarchy | undefined
-          if (entity.polygon.hierarchy instanceof Cesium.ConstantProperty) {
-            hierarchy = entity.polygon.hierarchy.getValue()
-          } else if (typeof entity.polygon.hierarchy.getValue === 'function') {
-            hierarchy = entity.polygon.hierarchy.getValue(Cesium.JulianDate.now())
-          }
-          
-          if (hierarchy && hierarchy.positions) {
-            const positions = hierarchy.positions
-            
-            if (isProvince) {
-              // 省份边界：灰色虚线
-              this.viewer.entities.add({
-                id: `province-border-${index}`,
-                name: '省份边界',
-                polyline: {
-                  positions: positions,
-                  width: 2,
-                  material: new Cesium.PolylineDashMaterialProperty({
-                    color: Cesium.Color.GRAY,
-                    gapColor: Cesium.Color.TRANSPARENT,
-                    dashLength: 16.0,
-                  }),
-                  clampToGround: true,
-                  arcType: Cesium.ArcType.GEODESIC,
-                } as any,
-              })
-            } else {
-              // 中国边境区域：填充淡红色 + 红色边界线
-              const fillColor = Cesium.Color.fromCssColorString('#FB685C').withAlpha(0.2) // 淡红色填充
-              const borderColor = Cesium.Color.fromCssColorString('#FB685C') // 红色边界
-              
-              // 添加填充区域
-              this.viewer.entities.add({
-                id: `china-border-fill-${index}`,
-                name: '中国边境区域填充',
-                polygon: {
-                  hierarchy: hierarchy,
-                  material: new Cesium.ColorMaterialProperty(fillColor),
-                  outline: false,
-                  clampToGround: true,
-                } as any,
-              })
-              
-              // 添加边界线
-              this.viewer.entities.add({
-                id: `china-border-line-${index}`,
-                name: '中国边境线',
-                polyline: {
-                  positions: positions,
-                  width: 3,
-                  material: new Cesium.ColorMaterialProperty(borderColor),
-                  clampToGround: true,
-                  arcType: Cesium.ArcType.GEODESIC,
-                } as any,
-              })
-            }
-          }
-        }
-        
-        // 如果已经有polyline，根据类型应用样式
-        if (entity.polyline) {
-          if (isProvince) {
-            entity.polyline.width = new Cesium.ConstantProperty(2)
-            entity.polyline.material = new Cesium.PolylineDashMaterialProperty({
-              color: Cesium.Color.GRAY,
-              gapColor: Cesium.Color.TRANSPARENT,
-              dashLength: 16.0,
-            })
-          } else {
-            entity.polyline.width = new Cesium.ConstantProperty(3)
-            entity.polyline.material = new Cesium.ColorMaterialProperty(
-              Cesium.Color.fromCssColorString('#FB685C'),
-            )
-          }
-          entity.polyline.clampToGround = new Cesium.ConstantProperty(true)
-          entity.polyline.arcType = new Cesium.ConstantProperty(Cesium.ArcType.GEODESIC)
-        }
-      })
+      console.log('加载的实体数量:', geoJsonDataSource.entities.values.length)
       
       // 飞转到中国的大致中心位置
       this.viewer.camera.flyTo({
@@ -348,7 +249,7 @@ export class CesiumController {
         duration: 2,
       })
       
-      console.log('边境线已绘制（来自阿里云官方数据）')
+      console.log('边境线已绘制（使用原始geo数据）')
       return geoJsonDataSource
     } catch (error) {
       console.error('加载GeoJSON数据失败:', error)
@@ -361,18 +262,6 @@ export class CesiumController {
    */
   static removeChinaBorder() {
     if (!this.viewer) return
-    
-    // 移除所有名为"中国边境线"、"中国边境区域填充"和"省份边界"的实体
-    const entities = this.viewer.entities.values
-    for (let i = entities.length - 1; i >= 0; i--) {
-      if (
-        entities[i].name === '中国边境线' ||
-        entities[i].name === '中国边境区域填充' ||
-        entities[i].name === '省份边界'
-      ) {
-        this.viewer.entities.remove(entities[i])
-      }
-    }
 
     // 移除所有GeoJSON数据源
     const dataSources = this.viewer.dataSources
