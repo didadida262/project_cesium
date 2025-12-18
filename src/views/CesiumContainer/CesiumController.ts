@@ -236,7 +236,35 @@ export class CesiumController {
     const url = geoJsonUrl || defaultGeoJsonUrl
 
     try {
-      // 加载GeoJSON数据，使用默认样式
+      // 先直接加载原始GeoJSON数据，提取省会信息
+      const response = await fetch(url)
+      const geoJsonData = await response.json()
+      
+      // 遍历GeoJSON features，提取省会信息
+      if (geoJsonData && geoJsonData.features && Array.isArray(geoJsonData.features)) {
+        geoJsonData.features.forEach((feature: any) => {
+          if (feature.properties) {
+            const props = feature.properties
+            const name = props.name
+            const adcode = props.adcode
+            const level = props.level
+            const center = props.center
+            
+            // 判断是否为省份：level为'province'，或者adcode是省级（后4位为0000且不是100000）
+            const isProvince = (level === 'province' || level === '省') || 
+                              (adcode && adcode !== 100000 && adcode % 10000 === 0 && adcode < 900000)
+            
+            if (isProvince && name && center && Array.isArray(center) && center.length >= 2) {
+              const [longitude, latitude] = center
+              const capitalPosition = Cesium.Cartesian3.fromDegrees(longitude, latitude)
+              drawPoint(this.viewer, name, capitalPosition)
+              console.log(`标记省会: ${name} (${longitude}, ${latitude})`)
+            }
+          }
+        })
+      }
+      
+      // 然后加载GeoJSON数据到Cesium，使用默认样式
       const geoJsonDataSource = await Cesium.GeoJsonDataSource.load(url)
       
       this.viewer.dataSources.add(geoJsonDataSource)
