@@ -11,7 +11,7 @@
       <div class="w-[calc(48%)] h-full flex items-center">
         名称
       </div>
-      <div class="w-[calc(48%)] h-full flex items-center justify-center">
+      <div class="w-[calc(48%)] h-full flex items-center">
         ID
       </div>
     </div>
@@ -44,7 +44,7 @@
         </div>
         <div
           :class="[
-            'flex justify-center items-center',
+            'flex items-center',
             'w-[calc(48%)] h-full',
             'select-none',
           ]"

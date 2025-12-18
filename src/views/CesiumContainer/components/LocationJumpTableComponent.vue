@@ -2,7 +2,7 @@
   <div class="w-full h-full flex flex-col justify-between items-center">
     <div
       :class="[
-        'header w-full h-[28px] text-[12px] flex justify-center items-center px-[10px]',
+        'header w-full h-[28px] text-[12px] flex items-center px-[10px]',
         'text-[#FB685C] font-semibold',
         'border-b-[2px] border-solid border-[#FB685C]/30',
         'bg-gradient-to-r from-transparent via-[#FB685C]/5 to-transparent',
@@ -16,7 +16,7 @@
         :key="index"
         :class="[
           'w-full h-[42px] text-[12px]',
-          'flex justify-center items-center px-[10px]',
+          'flex items-center px-[10px]',
           'rounded-md transition-all duration-300',
           'border',
           'hover:cursor-pointer',
@@ -31,7 +31,7 @@
         <div
           :class="[
             'w-full h-full',
-            'flex justify-center items-center',
+            'flex items-center',
             'select-none',
           ]"
         >

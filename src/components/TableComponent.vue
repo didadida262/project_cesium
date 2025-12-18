@@ -44,7 +44,7 @@
         </div>
         <div
           :class="[
-            'flex justify-between items-center ',
+            'flex items-center',
             'w-[calc(48%)] h-full',
             'select-none',
           ]"
