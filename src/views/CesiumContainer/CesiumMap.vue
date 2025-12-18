@@ -243,6 +243,8 @@ const handleClickBTN = (btn: any) => {
 onMounted(() => {
   CesiumController.init_world('cesiumContainer')
   //   CesiumController.drawPoints(MockPointData)
+  // 绘制中国边境线
+  CesiumController.drawChinaBorder()
 })
 </script>
 
