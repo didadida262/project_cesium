@@ -108,6 +108,9 @@
           v-if="currenModel === '动效演示'"
           :on-click="handleSelectAnimation"
         />
+        <ConfigContainer
+          v-if="currenModel === '通用配置'"
+        />
       </div>
     </div>
 
@@ -130,6 +133,7 @@ import DrawFlagContainer from './components/DrawFlagContainer.vue'
 import DrawAnimationContainer from './components/DrawAnimationContainer.vue'
 import MarkContainer from './components/MarkContainer.vue'
 import LocationJumpContainer from './components/LocationJumpContainer.vue'
+import ConfigContainer from './components/ConfigContainer.vue'
 
 const currenModel = ref('')
 const operationPanelRef = ref<HTMLElement | null>(null)
@@ -234,8 +238,8 @@ const handleClickBTN = (btn: any) => {
   currenModel.value = btn.text
   CesiumController.remove()
   
-  // 如果点击的是带有表格的按钮（跳转至目标地点、标注模式、动效演示、图标绘制），且当前处于收起状态，则自动展开
-  if ((btn.key === 'jump' || btn.key === 'mark' || btn.key === 'situation' || btn.key === 'drawFlag') && isCollapsed.value) {
+  // 如果点击的是带有表格的按钮（跳转至目标地点、标注模式、动效演示、图标绘制、通用配置），且当前处于收起状态，则自动展开
+  if ((btn.key === 'jump' || btn.key === 'mark' || btn.key === 'situation' || btn.key === 'drawFlag' || btn.key === 'config') && isCollapsed.value) {
     isCollapsed.value = false
   }
   

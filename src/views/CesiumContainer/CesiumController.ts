@@ -27,6 +27,7 @@ import { getLonLat, LonLatType } from './CesiumUtils'
 export class CesiumController {
   static viewer: Cesium.Viewer
   static drawTool: any
+  static chinaBorderDataSource: Cesium.GeoJsonDataSource | null = null
 
   static remove() {
     this.drawTool && this.drawTool._removeAllEvent()
@@ -284,6 +285,7 @@ export class CesiumController {
       const geoJsonDataSource = await Cesium.GeoJsonDataSource.load(url)
       
       this.viewer.dataSources.add(geoJsonDataSource)
+      this.chinaBorderDataSource = geoJsonDataSource // 保存数据源引用
       
       console.log('加载的实体数量:', geoJsonDataSource.entities.values.length)
       
@@ -314,6 +316,27 @@ export class CesiumController {
       if (ds) {
         this.viewer.dataSources.remove(ds)
       }
+    }
+    this.chinaBorderDataSource = null
+  }
+
+  /**
+   * 切换中国边境线的显示/隐藏
+   */
+  static async toggleChinaBorder(show: boolean) {
+    if (!this.viewer) return
+    
+    if (show) {
+      // 如果开启且边境线不存在，则重新加载
+      if (!this.chinaBorderDataSource) {
+        await this.drawChinaBorder()
+      } else {
+        // 如果已存在，则显示
+        this.chinaBorderDataSource.show = true
+      }
+    } else {
+      // 如果关闭，则删除边境线和填充色
+      this.removeChinaBorder()
     }
   }
 }

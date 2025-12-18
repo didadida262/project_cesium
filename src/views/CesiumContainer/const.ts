@@ -54,6 +54,10 @@ export const BTNMap = [
     text: '图标绘制',
     key: 'drawFlag',
   },
+  {
+    text: '通用配置',
+    key: 'config',
+  },
 ]
 export const options = [
   {
