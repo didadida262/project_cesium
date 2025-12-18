@@ -222,83 +222,137 @@ export class CesiumController {
     })
   }
 
+
   /**
    * 绘制中国边境线
-   * @param geoJsonUrl GeoJSON数据源的URL（可选）
+   * 使用阿里云数据可视化平台提供的官方中国边界数据
+   * @param geoJsonUrl GeoJSON数据源的URL（可选，默认使用阿里云官方数据）
    */
   static async drawChinaBorder(geoJsonUrl?: string) {
     if (!this.viewer) return
 
-    // 如果提供了GeoJSON URL，则使用GeoJSON数据源加载
-    if (geoJsonUrl) {
-      try {
-        const geoJsonDataSource = await Cesium.GeoJsonDataSource.load(geoJsonUrl, {
-          stroke: Cesium.Color.YELLOW,
-          strokeWidth: 3,
-          fill: Cesium.Color.YELLOW.withAlpha(0.1),
-        })
-        this.viewer.dataSources.add(geoJsonDataSource)
-        
-        // 飞转到中国的大致中心位置（北京附近）
-        this.viewer.camera.flyTo({
-          destination: Cesium.Cartesian3.fromDegrees(104.0, 35.0, 5000000),
-          duration: 2,
-        })
-        
-        return geoJsonDataSource
-      } catch (error) {
-        console.error('加载GeoJSON数据失败:', error)
-      }
-    } else {
-      // 使用简化的边界线坐标（中国主要边界关键点）
-      // 这是一个简化的示例，实际应用中建议使用完整的GeoJSON数据
-      const borderPositions = [
-        // 东北地区
-        Cesium.Cartesian3.fromDegrees(124.0, 53.5, 0), // 黑龙江东部
-        Cesium.Cartesian3.fromDegrees(130.0, 50.0, 0),
-        Cesium.Cartesian3.fromDegrees(135.0, 48.0, 0), // 黑龙江与俄罗斯交界
-        Cesium.Cartesian3.fromDegrees(125.0, 43.0, 0), // 吉林
-        Cesium.Cartesian3.fromDegrees(121.0, 40.5, 0), // 辽宁
-        // 华北地区
-        Cesium.Cartesian3.fromDegrees(117.5, 39.0, 0), // 北京附近
-        Cesium.Cartesian3.fromDegrees(111.0, 40.0, 0), // 内蒙古
-        Cesium.Cartesian3.fromDegrees(106.0, 42.0, 0),
-        // 西北地区
-        Cesium.Cartesian3.fromDegrees(96.0, 43.0, 0), // 新疆北部
-        Cesium.Cartesian3.fromDegrees(80.0, 45.0, 0), // 新疆最西
-        Cesium.Cartesian3.fromDegrees(73.0, 39.0, 0), // 新疆西南
-        Cesium.Cartesian3.fromDegrees(78.0, 35.0, 0), // 新疆南部
-        Cesium.Cartesian3.fromDegrees(82.0, 32.0, 0), // 西藏西部
-        // 西南地区
-        Cesium.Cartesian3.fromDegrees(85.0, 30.0, 0), // 西藏中部
-        Cesium.Cartesian3.fromDegrees(91.0, 29.0, 0), // 西藏
-        Cesium.Cartesian3.fromDegrees(98.0, 31.0, 0), // 西藏东部
-        Cesium.Cartesian3.fromDegrees(103.0, 28.0, 0), // 云南
-        Cesium.Cartesian3.fromDegrees(106.0, 23.0, 0), // 云南南部
-        // 华南地区
-        Cesium.Cartesian3.fromDegrees(108.0, 21.5, 0), // 广西
-        Cesium.Cartesian3.fromDegrees(110.0, 20.0, 0), // 海南岛北部
-        Cesium.Cartesian3.fromDegrees(114.0, 22.0, 0), // 广东
-        Cesium.Cartesian3.fromDegrees(118.0, 24.5, 0), // 福建
-        // 华东地区
-        Cesium.Cartesian3.fromDegrees(121.0, 31.0, 0), // 上海
-        Cesium.Cartesian3.fromDegrees(120.0, 36.0, 0), // 山东
-        Cesium.Cartesian3.fromDegrees(117.0, 38.0, 0), // 河北
-        // 回到起点
-        Cesium.Cartesian3.fromDegrees(124.0, 53.5, 0),
-      ]
+    // 使用阿里云数据可视化平台的官方中国边界数据
+    const defaultGeoJsonUrl = 'https://geo.datav.aliyun.com/areas_v3/bound/100000_full.json'
+    const url = geoJsonUrl || defaultGeoJsonUrl
 
-      const borderEntity = this.viewer.entities.add({
-        name: '中国边境线',
-        polyline: {
-          positions: borderPositions,
-          width: 4,
-          material: Cesium.Color.YELLOW,
-          clampToGround: true,
-        },
+    try {
+      // 加载GeoJSON数据，不使用默认样式
+      const geoJsonDataSource = await Cesium.GeoJsonDataSource.load(url, {
+        stroke: Cesium.Color.TRANSPARENT,
+        fill: Cesium.Color.TRANSPARENT,
+        strokeWidth: 0,
       })
-
-      return borderEntity
+      
+      // 先隐藏所有原始实体
+      const entities = geoJsonDataSource.entities.values
+      entities.forEach((entity: Cesium.Entity) => {
+        entity.show = false
+      })
+      
+      this.viewer.dataSources.add(geoJsonDataSource)
+      
+      console.log('加载的实体数量:', entities.length)
+      
+      // 判断是否为省级数据（通过adcode判断，100000是中国，其他是省份）
+      entities.forEach((entity: Cesium.Entity, index: number) => {
+        const properties = entity.properties
+        const adcode = properties && properties.getProperty ? properties.getProperty('adcode') : null
+        const isProvince = adcode && adcode !== 100000
+        
+        // 处理polygon，将其转换为polyline边界
+        if (entity.polygon && entity.polygon.hierarchy) {
+          // 处理PolygonHierarchy或Property
+          let hierarchy: Cesium.PolygonHierarchy | undefined
+          if (entity.polygon.hierarchy instanceof Cesium.ConstantProperty) {
+            hierarchy = entity.polygon.hierarchy.getValue()
+          } else if (typeof entity.polygon.hierarchy.getValue === 'function') {
+            hierarchy = entity.polygon.hierarchy.getValue(Cesium.JulianDate.now())
+          }
+          
+          if (hierarchy && hierarchy.positions) {
+            const positions = hierarchy.positions
+            
+            if (isProvince) {
+              // 省份边界：灰色虚线
+              this.viewer.entities.add({
+                id: `province-border-${index}`,
+                name: '省份边界',
+                polyline: {
+                  positions: positions,
+                  width: 2,
+                  material: new Cesium.PolylineDashMaterialProperty({
+                    color: Cesium.Color.GRAY,
+                    gapColor: Cesium.Color.TRANSPARENT,
+                    dashLength: 16.0,
+                  }),
+                  clampToGround: true,
+                  arcType: Cesium.ArcType.GEODESIC,
+                } as any,
+              })
+            } else {
+              // 中国边境区域：填充淡红色 + 红色边界线
+              const fillColor = Cesium.Color.fromCssColorString('#FB685C').withAlpha(0.2) // 淡红色填充
+              const borderColor = Cesium.Color.fromCssColorString('#FB685C') // 红色边界
+              
+              // 添加填充区域
+              this.viewer.entities.add({
+                id: `china-border-fill-${index}`,
+                name: '中国边境区域填充',
+                polygon: {
+                  hierarchy: hierarchy,
+                  material: new Cesium.ColorMaterialProperty(fillColor),
+                  outline: false,
+                  clampToGround: true,
+                } as any,
+              })
+              
+              // 添加边界线
+              this.viewer.entities.add({
+                id: `china-border-line-${index}`,
+                name: '中国边境线',
+                polyline: {
+                  positions: positions,
+                  width: 3,
+                  material: new Cesium.ColorMaterialProperty(borderColor),
+                  clampToGround: true,
+                  arcType: Cesium.ArcType.GEODESIC,
+                } as any,
+              })
+            }
+          }
+        }
+        
+        // 如果已经有polyline，根据类型应用样式
+        if (entity.polyline) {
+          if (isProvince) {
+            entity.polyline.width = new Cesium.ConstantProperty(2)
+            entity.polyline.material = new Cesium.PolylineDashMaterialProperty({
+              color: Cesium.Color.GRAY,
+              gapColor: Cesium.Color.TRANSPARENT,
+              dashLength: 16.0,
+            })
+          } else {
+            entity.polyline.width = new Cesium.ConstantProperty(3)
+            entity.polyline.material = new Cesium.ColorMaterialProperty(
+              Cesium.Color.fromCssColorString('#FB685C'),
+            )
+          }
+          entity.polyline.clampToGround = new Cesium.ConstantProperty(true)
+          entity.polyline.arcType = new Cesium.ConstantProperty(Cesium.ArcType.GEODESIC)
+        }
+      })
+      
+      // 飞转到中国的大致中心位置
+      this.viewer.camera.flyTo({
+        destination: Cesium.Cartesian3.fromDegrees(104.0, 35.0, 5000000),
+        duration: 2,
+      })
+      
+      console.log('边境线已绘制（来自阿里云官方数据）')
+      return geoJsonDataSource
+    } catch (error) {
+      console.error('加载GeoJSON数据失败:', error)
+      throw error
     }
   }
 
@@ -308,10 +362,14 @@ export class CesiumController {
   static removeChinaBorder() {
     if (!this.viewer) return
     
-    // 移除所有名为"中国边境线"的实体
+    // 移除所有名为"中国边境线"、"中国边境区域填充"和"省份边界"的实体
     const entities = this.viewer.entities.values
     for (let i = entities.length - 1; i >= 0; i--) {
-      if (entities[i].name === '中国边境线') {
+      if (
+        entities[i].name === '中国边境线' ||
+        entities[i].name === '中国边境区域填充' ||
+        entities[i].name === '省份边界'
+      ) {
         this.viewer.entities.remove(entities[i])
       }
     }
@@ -320,7 +378,7 @@ export class CesiumController {
     const dataSources = this.viewer.dataSources
     for (let i = dataSources.length - 1; i >= 0; i--) {
       const ds = dataSources.get(i)
-      if (ds && ds.name && ds.name.includes('China')) {
+      if (ds) {
         this.viewer.dataSources.remove(ds)
       }
     }
