@@ -241,6 +241,46 @@ export class CesiumController {
 
 
   /**
+   * 省份到省会城市的映射表
+   */
+  private static provinceToCapitalMap: Record<string, string> = {
+    '北京市': '北京',
+    '天津市': '天津',
+    '河北省': '石家庄',
+    '山西省': '太原',
+    '内蒙古自治区': '呼和浩特',
+    '辽宁省': '沈阳',
+    '吉林省': '长春',
+    '黑龙江省': '哈尔滨',
+    '上海市': '上海',
+    '江苏省': '南京',
+    '浙江省': '杭州',
+    '安徽省': '合肥',
+    '福建省': '福州',
+    '江西省': '南昌',
+    '山东省': '济南',
+    '河南省': '郑州',
+    '湖北省': '武汉',
+    '湖南省': '长沙',
+    '广东省': '广州',
+    '广西壮族自治区': '南宁',
+    '海南省': '海口',
+    '重庆市': '重庆',
+    '四川省': '成都',
+    '贵州省': '贵阳',
+    '云南省': '昆明',
+    '西藏自治区': '拉萨',
+    '陕西省': '西安',
+    '甘肃省': '兰州',
+    '青海省': '西宁',
+    '宁夏回族自治区': '银川',
+    '新疆维吾尔自治区': '乌鲁木齐',
+    '台湾省': '台北',
+    '香港特别行政区': '香港',
+    '澳门特别行政区': '澳门',
+  }
+
+  /**
    * 绘制中国边境线
    * 从本地 GeoData.json 文件读取数据
    * @param geoJsonUrl GeoJSON数据源的URL（可选，默认使用本地文件）
@@ -274,8 +314,10 @@ export class CesiumController {
             if (isProvince && name && center && Array.isArray(center) && center.length >= 2) {
               const [longitude, latitude] = center
               const capitalPosition = Cesium.Cartesian3.fromDegrees(longitude, latitude)
-              drawPoint(this.viewer, name, capitalPosition)
-              console.log(`标记省会: ${name} (${longitude}, ${latitude})`)
+              // 获取省会城市名称，如果映射表中没有则使用省份名称
+              const capitalName = this.provinceToCapitalMap[name] || name
+              drawPoint(this.viewer, capitalName, capitalPosition)
+              console.log(`标记省会: ${capitalName} (${longitude}, ${latitude})`)
             }
           }
         })
