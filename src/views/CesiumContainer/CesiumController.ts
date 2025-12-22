@@ -282,6 +282,13 @@ export class CesiumController {
       // 然后加载GeoJSON数据到Cesium，使用默认样式
       const geoJsonDataSource = await Cesium.GeoJsonDataSource.load(url)
       
+      // 取消填充色，只保留边框
+      geoJsonDataSource.entities.values.forEach((entity: any) => {
+        if (entity.polygon) {
+          entity.polygon.fill = false // 禁用填充
+        }
+      })
+      
       this.viewer.dataSources.add(geoJsonDataSource)
       this.chinaBorderDataSource = geoJsonDataSource // 保存数据源引用
       

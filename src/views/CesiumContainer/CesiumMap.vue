@@ -267,10 +267,7 @@ const handleClickBTN = (btn: any) => {
       // 不再自动跳转，而是显示表格让用户选择
       break
     case 'mark':
-      // 进入标注模式时，自动关闭边境线
-      if (CesiumController.chinaBorderDataSource) {
-        CesiumController.toggleChinaBorder(false)
-      }
+      // 标注模式保持边境线显示
       break
     // case "situation":
     //   CesiumController.showSituation();
