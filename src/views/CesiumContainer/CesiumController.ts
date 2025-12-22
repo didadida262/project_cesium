@@ -98,27 +98,7 @@ export class CesiumController {
       },
       duration: 2, // 飞行时间(秒)
     })
-    // 移除已存在的标记，避免重复
-    const labelsToRemove = ['台北', '台中', '高雄', '台南', '莆田', '汕头', '厦门', '南京', '金湖']
-    labelsToRemove.forEach((label) => {
-      const entities = this.viewer.entities.values
-      for (let i = entities.length - 1; i >= 0; i--) {
-        if (entities[i].name === label) {
-          this.viewer.entities.remove(entities[i])
-        }
-      }
-    })
-    // 添加标记
-    console.log('taipeiPosition', taipeiPosition)
-    // drawPoint(this.viewer, '台北', taipeiPosition)
-    // drawPoint(this.viewer, '台中', taizhongPosition)
-    // drawPoint(this.viewer, '高雄', gaoxiongPosition)
-    // drawPoint(this.viewer, '台南', tainanPosition)
-    // drawPoint(this.viewer, '莆田', putianPosition)
-    // drawPoint(this.viewer, '汕头', shantouPosition)
-    // drawPoint(this.viewer, '厦门', xiamenPosition)
-    // drawPoint(this.viewer, '南京', nanjingPosition)
-    // drawPoint(this.viewer, '金湖', jinhuPosition)
+    // 注意：不再移除省会城市标记（如"台北"），因为这些标记是由drawChinaBorder统一管理的
     showExplosion(this.viewer, tainanPosition)
   }
 
@@ -139,14 +119,7 @@ export class CesiumController {
       },
       duration: 2, // 飞行时间(秒)
     })
-    // 移除已存在的标记，避免重复
-    const entities = this.viewer.entities.values
-    for (let i = entities.length - 1; i >= 0; i--) {
-      if (entities[i].name === '北京') {
-        this.viewer.entities.remove(entities[i])
-      }
-    }
-    // 添加标记
+    // 注意：不再移除省会城市标记（如"北京"），因为这些标记是由drawChinaBorder统一管理的
   }
 
   static clearAllMark() {
