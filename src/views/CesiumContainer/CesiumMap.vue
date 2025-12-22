@@ -128,7 +128,8 @@ import 'cesium/Build/Cesium/Widgets/widgets.css'
 import Button from '../../components/ButtonComponent.vue'
 import Select from '../../components/SelectComponent.vue'
 import { CesiumController } from './CesiumController'
-import { BTNMap, options, MockPointData } from './const'
+import { BTNMap, options, MockPointData, beijingPosition, gaoxiongPosition, tainanPosition } from './const'
+import * as Cesium from 'cesium'
 import DrawFlagContainer from './components/DrawFlagContainer.vue'
 import DrawAnimationContainer from './components/DrawAnimationContainer.vue'
 import MarkContainer from './components/MarkContainer.vue'
@@ -228,10 +229,28 @@ const handleSelectMark = (item: any) => {
   CesiumController.mark(item.key)
 }
 const handleSelectLocation = (item: any) => {
-  if (item.key === 'beijing') {
-    CesiumController.flyToBeijing()
-  } else if (item.key === 'taiwan') {
-    CesiumController.flyToTaiwan()
+  // 位置配置映射表
+  const locationConfig: Record<string, { position: Cesium.Cartesian3; height: number; showExplosion?: boolean; explosionPosition?: Cesium.Cartesian3 }> = {
+    beijing: {
+      position: beijingPosition,
+      height: 500000,
+    },
+    taiwan: {
+      position: gaoxiongPosition,
+      height: 900000,
+      showExplosion: true,
+      explosionPosition: tainanPosition,
+    },
+  }
+  
+  const config = locationConfig[item.key]
+  if (config) {
+    CesiumController.flyToLocation(
+      config.position,
+      config.height,
+      config.showExplosion || false,
+      config.explosionPosition,
+    )
   }
 }
 const handleClickBTN = (btn: any) => {

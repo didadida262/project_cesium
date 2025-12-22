@@ -10,18 +10,7 @@ import Polyline from './tools/Polyline'
 
 import { handleAnimation, moveAToBGLBV2 } from './animation/Animations'
 import { drawPoint, showExplosion } from './CesiumUtils'
-import {
-  taipeiPosition,
-  taizhongPosition,
-  gaoxiongPosition,
-  tainanPosition,
-  xiamenPosition,
-  putianPosition,
-  shantouPosition,
-  nanjingPosition,
-  jinhuPosition,
-  beijingPosition,
-} from './const'
+// 位置常量已移至调用处使用，不再在此导入
 import { getLonLat, LonLatType } from './CesiumUtils'
 
 export class CesiumController {
@@ -81,15 +70,27 @@ export class CesiumController {
     const res = this.drawTool && this.drawTool.exportData()
     return res
   }
-  static flyToTaiwan() {
+  /**
+   * 统一的跳转函数
+   * @param position 目标位置的Cartesian3坐标
+   * @param height 相机高度（米），默认500000
+   * @param showExplosionEffect 是否显示爆炸效果，默认false
+   * @param explosionPosition 爆炸效果位置（如果showExplosionEffect为true），默认使用position
+   */
+  static flyToLocation(
+    position: Cesium.Cartesian3,
+    height = 500000,
+    showExplosionEffect = false,
+    explosionPosition?: Cesium.Cartesian3,
+  ) {
     if (!this.viewer) return
-    const destination: LonLatType = getLonLat(gaoxiongPosition)
+    const destination: LonLatType = getLonLat(position)
     // 使用flyTo定位
     this.viewer.camera.flyTo({
       destination: Cesium.Cartesian3.fromDegrees(
         destination.longitude,
         destination.latitude,
-        900000,
+        height,
       ),
       orientation: {
         heading: Cesium.Math.toRadians(0), // 朝向
@@ -98,28 +99,10 @@ export class CesiumController {
       },
       duration: 2, // 飞行时间(秒)
     })
-    // 注意：不再移除省会城市标记（如"台北"），因为这些标记是由drawChinaBorder统一管理的
-    showExplosion(this.viewer, tainanPosition)
-  }
-
-  static flyToBeijing() {
-    if (!this.viewer) return
-    const destination: LonLatType = getLonLat(beijingPosition)
-    // 使用flyTo定位
-    this.viewer.camera.flyTo({
-      destination: Cesium.Cartesian3.fromDegrees(
-        destination.longitude,
-        destination.latitude,
-        500000,
-      ),
-      orientation: {
-        heading: Cesium.Math.toRadians(0), // 朝向
-        pitch: Cesium.Math.toRadians(-80), // 俯仰角
-        roll: 0.0,
-      },
-      duration: 2, // 飞行时间(秒)
-    })
-    // 注意：不再移除省会城市标记（如"北京"），因为这些标记是由drawChinaBorder统一管理的
+    // 如果需要显示爆炸效果
+    if (showExplosionEffect) {
+      showExplosion(this.viewer, explosionPosition || position)
+    }
   }
 
   static clearAllMark() {
